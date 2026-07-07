@@ -1,0 +1,228 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  AUTHOR
+  ADMIN
+}
+
+enum subscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PENDING
+}
+
+model User {
+  id                      String   @id @default(uuid())
+  email                   String   @unique
+  name                    String?
+  role                    Role     @default(USER)
+  emailVerified           Boolean  @default(false)
+  image                   String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  fingerprint             String?
+  isSubscribed            Boolean  @default(false)
+  subscriptionId          String?  @unique
+  isSubscribeToNewsletter Boolean  @default(false)
+
+  accounts     Account[]
+  articles     Article[]
+  likes        Like[]
+  sessions     Session[]
+  subscription subscription?  @relation(fields: [subscriptionId], references: [id])
+  visits       VisitorVisit[]
+  newsletters  Newsletter[]   @relation("NewsletterRecipients")
+
+  @@map("user")
+}
+
+model Newsletter {
+  id         String   @id @default(uuid())
+  title      String
+  content    String
+  sentAt     DateTime @default(now())
+  recipients User[]   @relation("NewsletterRecipients")
+
+  @@map("newsletter")
+}
+
+model subscription {
+  id          String             @id @default(uuid())
+  status      subscriptionStatus @default(PENDING)
+  providerId  String?
+  customerId  String?
+  planId      String?
+  startedAt   DateTime?
+  expiresAt   DateTime?
+  cancelledAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  user        User?
+
+  @@index([status])
+  @@index([expiresAt])
+  @@map("subscription")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  slug      String     @unique
+  parentId  String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  articles  Article[]
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Category[] @relation("CategoryTree")
+
+  @@map("category")
+}
+
+model Article {
+  id            String         @id @default(uuid())
+  title         String
+  slug          String         @unique
+  published     Boolean        @default(false)
+  publishedAt   DateTime?
+  authorId      String
+  categoryId    String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  audioUrl      String?
+  author        User           @relation(fields: [authorId], references: [id])
+  category      Category       @relation(fields: [categoryId], references: [id])
+  parts         ArticlePart[]
+  media         Media?
+  likes         Like[]
+  visitorVisits VisitorVisit[]
+
+  @@index([authorId])
+  @@index([categoryId])
+  @@map("article")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model Media {
+  id   String    @id @default(uuid())
+  type MediaType
+
+  url          String
+  thumbnailUrl String?
+
+  alt    String?
+  legend String?
+
+  articleId String  @unique
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("media")
+}
+
+model ArticlePart {
+  id        String   @id @default(uuid())
+  title     String?
+  content   String
+  order     Int
+  articleId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([articleId])
+  @@map("article_part")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  articleId String
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId])
+  @@index([articleId])
+  @@map("like")
+}
+
+model VisitorVisit {
+  id          String   @id @default(uuid())
+  fingerprint String
+  articleId   String
+  userId      String?
+  createdAt   DateTime @default(now())
+  article     Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id])
+
+  @@index([fingerprint])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("visitor_visit")
+}
