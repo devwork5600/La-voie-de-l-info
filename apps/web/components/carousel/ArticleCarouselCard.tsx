@@ -1,7 +1,11 @@
+"use client";
+
 import { Prisma } from "@lvdi/database";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 type ArticleWithRelations = Prisma.ArticleGetPayload<{
   include: {
@@ -15,6 +19,8 @@ type ArticleWithRelations = Prisma.ArticleGetPayload<{
 type Props = { article: ArticleWithRelations };
 
 export function ArticleCarouselCard({ article }: Props) {
+  const [isLoading, setIsLoading] = useState(true);
+
   if (!article) return null;
 
   const excerpt = article.parts[0]?.content;
@@ -29,7 +35,11 @@ export function ArticleCarouselCard({ article }: Props) {
               alt={article.media.alt ?? article.title}
               fill
               sizes="(min-width: 1024px) 280px, 60vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className={cn(
+                "object-cover opacity-0 transition-[opacity,transform] duration-300 group-hover:scale-105",
+                !isLoading && "opacity-100"
+              )}
+              onLoad={() => setIsLoading(false)}
             />
           )}
         </div>
