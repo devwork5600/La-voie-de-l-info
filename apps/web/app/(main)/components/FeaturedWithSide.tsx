@@ -15,40 +15,39 @@ type ArticleWithRelations = Prisma.ArticleGetPayload<{
 
 interface FeaturedWithSideProps {
   articles: ArticleWithRelations[];
-  sideChunks: ArticleWithRelations[][];
+  sideArticles: ArticleWithRelations[];
+  special?: "subscribe" | "newsletter";
 }
 
-const FeaturedWithSide = ({ articles, sideChunks }: FeaturedWithSideProps) => {
+const FeaturedWithSide = ({
+  articles,
+  sideArticles,
+  special = "subscribe",
+}: FeaturedWithSideProps) => {
   return (
-    <div className="mx-auto flex max-w-[1440px] flex-col gap-16 px-4 py-8">
-      {articles.map((article, index) => (
-        <div key={article.id} className="flex justify-center gap-6">
-          <main className="w-full max-w-4xl">
-            <FeaturedArticleCard
-              slug={article.slug}
-              tag={article.category.name}
-              title={article.title}
-              excerpt={article.parts[0]?.content ?? ""}
-              body={
-                article.parts[1]?.content ?? article.parts[0]?.content ?? ""
-              }
-              imageUrl={article.media?.url}
-              imageAlt={article.media?.alt ?? undefined}
-              author={article.author.name ?? "Rédaction"}
-              publishedAt={article.createdAt}
-            />
-          </main>
+    <div className="mx-auto flex max-w-[1440px] justify-center gap-6 px-4 py-8">
+      <main className="flex w-full max-w-4xl flex-col gap-16">
+        {articles.map((article) => (
+          <FeaturedArticleCard
+            key={article.id}
+            slug={article.slug}
+            tag={article.category.name}
+            title={article.title}
+            excerpt={article.parts[0]?.content ?? ""}
+            body={article.parts[1]?.content ?? article.parts[0]?.content ?? ""}
+            imageUrl={article.media?.url}
+            imageAlt={article.media?.alt ?? undefined}
+            author={article.author.name ?? "Rédaction"}
+            publishedAt={article.createdAt}
+          />
+        ))}
+      </main>
 
-          <aside className="hidden md:block">
-            <div className="w-[260px] shrink-0">
-              <TrendingArticles
-                articles={sideChunks[index] ?? []}
-                special={index % 2 === 0 ? "subscribe" : "newsletter"}
-              />
-            </div>
-          </aside>
+      <aside className="hidden md:block">
+        <div className="sticky top-24 w-[260px] shrink-0">
+          <TrendingArticles articles={sideArticles} special={special} />
         </div>
-      ))}
+      </aside>
     </div>
   );
 };

@@ -12,40 +12,24 @@ import { ArticleCarousel } from "@/components/carousel/ArticleCarousel";
 
 const Page = async () => {
   const [
-    { articles: sidePool },
+    { articles: sideArticles },
     { articles: featuredPool },
     { articles: threeUpPool },
-    { articles: sidePool2 },
+    { articles: sideArticles2 },
     { articles: featuredPool2 },
-    { articles: sidePool3 },
+    { articles: sideArticles3 },
     { articles: featuredPool3 },
     categories,
   ] = await Promise.all([
-    getArticles({ limit: 12 }),
-    getArticles({ limit: 3 }),
+    getArticles({ limit: 4 }),
+    getArticles({ limit: 2 }),
     getArticles({ limit: 3, page: 2 }),
-    getArticles({ limit: 12, page: 2 }),
-    getArticles({ limit: 3, page: 3 }),
-    getArticles({ limit: 12, page: 3 }),
-    getArticles({ limit: 3, page: 4 }),
+    getArticles({ limit: 4, page: 2 }),
+    getArticles({ limit: 2, page: 3 }),
+    getArticles({ limit: 4, page: 3 }),
+    getArticles({ limit: 2, page: 4 }),
     getCategoriesByArticleCount(2, false),
   ]);
-
-  const sideChunks = [
-    sidePool.slice(0, 4),
-    sidePool.slice(4, 8),
-    sidePool.slice(8, 12),
-  ];
-  const sideChunks2 = [
-    sidePool2.slice(0, 4),
-    sidePool2.slice(4, 8),
-    sidePool2.slice(8, 12),
-  ];
-  const sideChunks3 = [
-    sidePool3.slice(0, 4),
-    sidePool3.slice(4, 8),
-    sidePool3.slice(8, 12),
-  ];
 
   const [carouselCategory, gridCategory] = categories;
 
@@ -64,13 +48,21 @@ const Page = async () => {
 
   return (
     <>
-      <FeaturedWithSide articles={featuredPool} sideChunks={sideChunks} />
+      <FeaturedWithSide
+        articles={featuredPool}
+        sideArticles={sideArticles}
+        special="subscribe"
+      />
 
       <div className="mx-auto w-full max-w-[1180px] px-4 py-8">
         <FeaturedThreeUp articles={threeUpPool} />
       </div>
 
-      <FeaturedWithSide articles={featuredPool2} sideChunks={sideChunks2} />
+      <FeaturedWithSide
+        articles={featuredPool2}
+        sideArticles={sideArticles2}
+        special="newsletter"
+      />
 
       <ArticleCarousel
         articles={carouselArticles}
@@ -82,7 +74,11 @@ const Page = async () => {
         }
       />
 
-      <FeaturedWithSide articles={featuredPool3} sideChunks={sideChunks3} />
+      <FeaturedWithSide
+        articles={featuredPool3}
+        sideArticles={sideArticles3}
+        special="subscribe"
+      />
     </>
   );
 };
