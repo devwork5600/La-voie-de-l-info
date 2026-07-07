@@ -1,6 +1,6 @@
-'use server';
+"use server";
 
-import { db } from "@lvdi/database";
+import { db, Prisma } from "@lvdi/database";
 
 // console.log(db, "database")
 /**
@@ -19,7 +19,6 @@ export interface CategoryWithChildren {
     slug: string;
   }[];
 }
-
 
 /**
  * Fetches all root categories with their children for hierarchical selection.
@@ -43,7 +42,7 @@ export async function getRootCategoriesWithChildren() {
         },
       },
       orderBy: {
-        name: 'asc',
+        name: "asc",
       },
     });
     return categories;
@@ -53,22 +52,18 @@ export async function getRootCategoriesWithChildren() {
   }
 }
 
-
-
 export async function getCategoriesByArticleCount(
   limit: number = 10,
   includeChildren: boolean = false
 ): Promise<CategoryWithChildren[]> {
   try {
+    // Direct article count alone under-ranks parents whose content actually
+    // lives on their subcategories, so children's counts are fetched here too
+    // and folded into the ranking total below (Prisma can't sum a nested
+    // relation's count at the query level, hence the JS sort/slice).
     const categories = await db.category.findMany({
       where: {
         parentId: null, // Only get top-level categories
-      },
-      take: limit,
-      orderBy: {
-        articles: {
-          _count: 'desc',
-        },
       },
       select: {
         id: true,
@@ -79,23 +74,52 @@ export async function getCategoriesByArticleCount(
             articles: true,
           },
         },
-        children: includeChildren ? {
+        children: {
           select: {
             id: true,
             name: true,
             slug: true,
-          }
-        } : false,
+            _count: {
+              select: {
+                articles: true,
+              },
+            },
+          },
+        },
       },
     });
 
-    return categories as unknown as CategoryWithChildren[];
+    const ranked = categories
+      .map((category) => ({
+        ...category,
+        totalArticles:
+          category._count.articles +
+          category.children.reduce(
+            (sum, child) => sum + child._count.articles,
+            0
+          ),
+      }))
+      .sort((a, b) => b.totalArticles - a.totalArticles)
+      .slice(0, limit);
+
+    return ranked.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+      _count: category._count,
+      children: includeChildren
+        ? category.children.map((child) => ({
+            id: child.id,
+            name: child.name,
+            slug: child.slug,
+          }))
+        : undefined,
+    }));
   } catch (error) {
     console.error("Failed to fetch categories:", error);
     throw new Error("Impossible de récupérer les catégories.");
   }
 }
-
 
 export interface GetArticlesParams {
   page?: number;
@@ -127,43 +151,45 @@ export async function getArticles({
   if (subCategorySlug) {
     categoryCondition = { category: { slug: subCategorySlug } };
   } else if (categorySlug) {
-    // If we have a category slug, we want articles in this category 
+    // If we have a category slug, we want articles in this category
     // OR in any of its subcategories
     categoryCondition = {
       OR: [
         { category: { slug: categorySlug } },
-        { category: { parent: { slug: categorySlug } } }
-      ]
+        { category: { parent: { slug: categorySlug } } },
+      ],
     };
   } else if (categoryId) {
     categoryCondition = { categoryId };
   }
 
   // Build the author filter
-  let authorCondition: any = {};
+  let authorCondition: Prisma.ArticleWhereInput = {};
   if (authorId) {
     authorCondition = { authorId };
   }
 
-  const where: any = {
+  const where: Prisma.ArticleWhereInput = {
     AND: [
       categoryCondition,
       authorCondition,
-      search ? {
-        OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          {
-            parts: {
-              some: {
-                OR: [
-                  { title: { contains: search, mode: 'insensitive' } },
-                  { content: { contains: search, mode: 'insensitive' } },
-                ],
+      search
+        ? {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              {
+                parts: {
+                  some: {
+                    OR: [
+                      { title: { contains: search, mode: "insensitive" } },
+                      { content: { contains: search, mode: "insensitive" } },
+                    ],
+                  },
+                },
               },
-            },
-          },
-        ],
-      } : {},
+            ],
+          }
+        : {},
     ],
   };
 
@@ -174,7 +200,7 @@ export async function getArticles({
         take: limit,
         skip: skip,
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
         include: {
           media: true,
@@ -194,7 +220,7 @@ export async function getArticles({
               order: true,
             },
             orderBy: {
-              order: 'asc',
+              order: "asc",
             },
           },
         },

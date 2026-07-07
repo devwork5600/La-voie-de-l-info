@@ -1,46 +1,88 @@
 import React from "react";
 
 import ArticlesGrid from "./components/ArticlesGrid";
-import FeaturedArticleCard from "./components/FeaturedArticleCard";
-import TrendingArticles from "./components/TrendingArticles";
+import FeaturedThreeUp from "./components/FeaturedThreeUp";
+import FeaturedWithSide from "./components/FeaturedWithSide";
 
-import { getArticles } from "@/actions/categories-actions";
+import {
+  getArticles,
+  getCategoriesByArticleCount,
+} from "@/actions/categories-actions";
 import { ArticleCarousel } from "@/components/carousel/ArticleCarousel";
 
 const Page = async () => {
-  const { articles } = await getArticles({ limit: 13 });
+  const [
+    { articles: sidePool },
+    { articles: featuredPool },
+    { articles: threeUpPool },
+    { articles: sidePool2 },
+    { articles: featuredPool2 },
+    { articles: sidePool3 },
+    { articles: featuredPool3 },
+    categories,
+  ] = await Promise.all([
+    getArticles({ limit: 12 }),
+    getArticles({ limit: 3 }),
+    getArticles({ limit: 3, page: 2 }),
+    getArticles({ limit: 12, page: 2 }),
+    getArticles({ limit: 3, page: 3 }),
+    getArticles({ limit: 12, page: 3 }),
+    getArticles({ limit: 3, page: 4 }),
+    getCategoriesByArticleCount(2, false),
+  ]);
 
-  const trendingArticles = articles.slice(0, 5);
-  const carouselArticles = articles;
-  const gridArticles = articles.slice(0, 8);
+  const sideChunks = [
+    sidePool.slice(0, 4),
+    sidePool.slice(4, 8),
+    sidePool.slice(8, 12),
+  ];
+  const sideChunks2 = [
+    sidePool2.slice(0, 4),
+    sidePool2.slice(4, 8),
+    sidePool2.slice(8, 12),
+  ];
+  const sideChunks3 = [
+    sidePool3.slice(0, 4),
+    sidePool3.slice(4, 8),
+    sidePool3.slice(8, 12),
+  ];
+
+  const [carouselCategory, gridCategory] = categories;
+
+  const [{ articles: carouselArticles }, { articles: gridArticles }] =
+    await Promise.all([
+      getArticles({ limit: 8, categorySlug: carouselCategory?.slug }),
+      getArticles({ limit: 8, categorySlug: gridCategory?.slug }),
+    ]);
+
+  const carouselTitle = carouselCategory
+    ? `Découvrez ${carouselCategory.name}`
+    : "Découvrez nos articles";
+  const gridTitle = gridCategory
+    ? `Les derniers articles ${gridCategory.name}`
+    : "Les derniers articles";
 
   return (
     <>
-      <div className="mx-auto flex max-w-[1440px] justify-center gap-6 px-4 py-8">
-        <main className="w-full max-w-4xl">
-          <FeaturedArticleCard
-            slug="le-defi-du-stockage-de-lenergie"
-            title="Le défi du stockage de l'énergie"
-            excerpt="Malgré les progrès réalisés dans le développement des énergies renouvelables, la question du stockage demeure l'un des principaux défis du secteur."
-            body="Contrairement aux centrales traditionnelles capables de produire de l'électricité à la demande, les installations solaires et éoliennes dépendent fortement des conditions météorologiques, rendant l'infrastructure de stockage cruciale pour la stabilité du réseau national..."
-            author="Adrien"
-            publishedAt="2026-06-23"
-            commentsCount={12}
-          />
-        </main>
+      <FeaturedWithSide articles={featuredPool} sideChunks={sideChunks} />
 
-        <aside className="hidden md:block">
-          <div className="w-[260px] shrink-0">
-            <TrendingArticles articles={trendingArticles} />
-          </div>
-        </aside>
+      <div className="mx-auto w-full max-w-[1180px] px-4 py-8">
+        <FeaturedThreeUp articles={threeUpPool} />
       </div>
 
-      <ArticleCarousel articles={carouselArticles} />
+      <FeaturedWithSide articles={featuredPool2} sideChunks={sideChunks2} />
 
-      <div className="mx-auto w-full max-w-[1440px] px-4 py-8">
-        <ArticlesGrid articles={gridArticles} />
-      </div>
+      <ArticleCarousel
+        articles={carouselArticles}
+        title={carouselTitle}
+        href={
+          carouselCategory
+            ? `/articles?category=${carouselCategory.slug}`
+            : undefined
+        }
+      />
+
+      <FeaturedWithSide articles={featuredPool3} sideChunks={sideChunks3} />
     </>
   );
 };
