@@ -14,6 +14,7 @@ interface FeaturedArticleCardProps {
   publishedAt: Date | string;
   commentsCount?: number;
   slug: string;
+  showBody?: boolean;
 }
 
 const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
@@ -27,6 +28,7 @@ const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
   publishedAt,
   commentsCount,
   slug,
+  showBody = true,
 }) => {
   const date = new Date(publishedAt).toLocaleDateString("fr-FR", {
     day: "2-digit",
@@ -67,7 +69,9 @@ const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
         )}
       </div>
 
-      <p className="text-foreground/90 mt-6 leading-relaxed">{body}</p>
+      {showBody && (
+        <p className="text-foreground/90 mt-6 leading-relaxed">{body}</p>
+      )}
 
       <div className="mt-6 flex items-center justify-between text-xs tracking-wide uppercase">
         <div className="text-muted-foreground flex items-center gap-4">

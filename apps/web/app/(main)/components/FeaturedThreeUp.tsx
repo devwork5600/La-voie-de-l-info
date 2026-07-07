@@ -31,6 +31,7 @@ const FeaturedThreeUp = ({ articles }: FeaturedThreeUpProps) => {
           imageAlt={article.media?.alt ?? undefined}
           author={article.author.name ?? "Rédaction"}
           publishedAt={article.createdAt}
+          showBody={false}
         />
       ))}
     </div>
