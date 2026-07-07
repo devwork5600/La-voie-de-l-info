@@ -2,6 +2,8 @@
 
 import { db, Prisma } from "@lvdi/database";
 
+import { getUser } from "@/lib/auth/auth-session";
+
 // console.log(db, "database")
 /**
  * Interface for Category with article count and children
@@ -239,4 +241,78 @@ export async function getArticles({
     console.error("Failed to fetch articles:", error);
     throw new Error("Impossible de récupérer les articles.");
   }
+}
+
+/**
+ * Fetches a single article by slug with its relations, for the article page.
+ */
+export async function getArticleBySlug(slug: string) {
+  try {
+    const article = await db.article.findUnique({
+      where: { slug },
+      include: {
+        media: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+        category: {
+          include: {
+            parent: true,
+          },
+        },
+        parts: {
+          orderBy: {
+            order: "asc",
+          },
+        },
+      },
+    });
+
+    if (!article) return null;
+
+    const user = await getUser();
+
+    const [isLiked, likesCount] = await Promise.all([
+      user
+        ? db.like
+            .findUnique({
+              where: {
+                userId_articleId: { userId: user.id, articleId: article.id },
+              },
+            })
+            .then((like) => !!like)
+        : Promise.resolve(false),
+      db.like.count({ where: { articleId: article.id } }),
+    ]);
+
+    return { ...article, isLiked, likesCount };
+  } catch (error) {
+    console.error("Failed to fetch article:", error);
+    throw new Error("Impossible de récupérer l'article.");
+  }
+}
+
+/**
+ * Toggles the current user's like on an article.
+ */
+export async function toggleLike(articleId: string) {
+  const user = await getUser();
+
+  if (!user) {
+    throw new Error("Vous devez être connecté pour aimer un article.");
+  }
+
+  const existingLike = await db.like.findUnique({
+    where: { userId_articleId: { userId: user.id, articleId } },
+  });
+
+  if (existingLike) {
+    await db.like.delete({ where: { id: existingLike.id } });
+    return { liked: false };
+  }
+
+  await db.like.create({ data: { userId: user.id, articleId } });
+  return { liked: true };
 }
