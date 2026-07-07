@@ -21,28 +21,30 @@ export function ArticleCarouselCard({ article }: Props) {
 
   return (
     <Link href={`/articles/${article.slug}`}>
-      <article className="group flex h-full w-full flex-col overflow-hidden bg-background">
-        <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
+      <article className="group bg-background flex h-full w-full flex-col overflow-hidden">
+        <div className="bg-muted relative aspect-4/3 w-full overflow-hidden">
           {article.media?.url && (
             <Image
               src={article.media.url}
               alt={article.media.alt ?? article.title}
               fill
               sizes="(min-width: 1024px) 280px, 60vw"
-              className="object-cover grayscale transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           )}
         </div>
 
         <div className="mt-3 flex flex-1 flex-col gap-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+          <p className="text-primary text-xs font-semibold tracking-wide uppercase">
             {article.category.name}
           </p>
-          <h3 className="line-clamp-2 font-semibold leading-snug transition group-hover:text-primary">
+          <h3 className="group-hover:text-primary line-clamp-2 leading-snug font-semibold transition">
             {article.title}
           </h3>
           {excerpt && (
-            <p className="line-clamp-2 text-sm text-muted-foreground">{excerpt}</p>
+            <p className="text-muted-foreground line-clamp-2 text-sm">
+              {excerpt}
+            </p>
           )}
         </div>
       </article>

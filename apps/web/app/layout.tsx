@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Libre_Baskerville, Playfair_Display } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Libre_Baskerville,
+  Playfair_Display,
+} from "next/font/google";
+
 import "./globals.css";
+import { AuthModalManager } from "@/components/auth/AuthModalManager";
+import { WriterRedirectModal } from "@/components/modals/WriterRedirectModal";
 import { TanstackProvider } from "@/components/providers/Tanstackprovider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthModalManager } from "@/components/auth/AuthModalManager";
-import { WriterRedirectModal } from "@/components/modals/WriterRedirectModal";
-
-
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +51,7 @@ export default function RootLayout({
       className={`scrollbar scrollbar-none ${geistSans.variable} ${geistMono.variable} ${libreBaskerville.variable} ${playfairDisplay.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <TanstackProvider>
           <ThemeProvider
             attribute="class"
@@ -57,7 +60,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster />
-              <AuthModalManager />
+            <AuthModalManager />
             <WriterRedirectModal />
             <main className="grow">{children}</main>
           </ThemeProvider>

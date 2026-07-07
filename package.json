@@ -19,7 +19,7 @@
   },
   "lint-staged": {
     "apps/web/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+      "eslint --fix --config apps/web/eslint.config.mjs"
     ],
     "**/*.{json,css,md}": [
       "prettier --write"
