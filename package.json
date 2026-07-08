@@ -9,6 +9,7 @@
     "dev:web": "npm run dev --workspace=web",
     "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces",
+    "test": "npm run test --workspace=web",
     "prepare": "husky || true"
   },
   "devDependencies": {
