@@ -16,6 +16,9 @@ const parseStripeDate = (dateVal: number | null | undefined): Date | null => {
 const getCurrentPeriodStart = (subscription: Stripe.Subscription) =>
   subscription.items.data[0]?.current_period_start ?? subscription.start_date;
 
+const getCurrentPeriodEnd = (subscription: Stripe.Subscription) =>
+  subscription.items.data[0]?.current_period_end;
+
 async function resolveUserIdFromCustomer(
   customerId: string | Stripe.Customer | Stripe.DeletedCustomer
 ): Promise<string | undefined> {
@@ -82,6 +85,7 @@ export async function POST(req: Request) {
                     : subscription.customer.id,
                 planId: subscription.items.data[0]?.price.id,
                 startedAt: parseStripeDate(getCurrentPeriodStart(subscription)),
+                expiresAt: parseStripeDate(getCurrentPeriodEnd(subscription)),
               },
             });
 
@@ -105,14 +109,14 @@ export async function POST(req: Request) {
         });
 
         if (existingSub) {
-          const isCancelledOrScheduled =
-            subscription.status === "canceled" ||
-            subscription.cancel_at_period_end === true;
-
+          // `cancel_at_period_end` only *schedules* a cancellation — the
+          // subscription (and the user's access) stays active until Stripe
+          // actually ends it, which fires `customer.subscription.deleted`
+          // below. Only Stripe's own "canceled" status means access is gone.
           let status: "ACTIVE" | "CANCELLED" | "EXPIRED" | "PENDING" =
             "PENDING";
 
-          if (isCancelledOrScheduled) {
+          if (subscription.status === "canceled") {
             status = "CANCELLED";
           } else if (
             subscription.status === "active" ||
@@ -132,9 +136,8 @@ export async function POST(req: Request) {
               status,
               planId: subscription.items.data[0]?.price.id,
               startedAt: parseStripeDate(getCurrentPeriodStart(subscription)),
-              cancelledAt: isCancelledOrScheduled
-                ? (parseStripeDate(subscription.canceled_at) ?? new Date())
-                : parseStripeDate(subscription.canceled_at),
+              expiresAt: parseStripeDate(getCurrentPeriodEnd(subscription)),
+              cancelledAt: parseStripeDate(subscription.canceled_at),
             },
           });
 

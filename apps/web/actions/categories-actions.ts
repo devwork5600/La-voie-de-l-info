@@ -339,3 +339,72 @@ export async function toggleLike(articleId: string) {
   await db.like.create({ data: { userId: user.id, articleId } });
   return { liked: true };
 }
+
+export interface GetLikedArticlesParams {
+  page?: number;
+  limit?: number;
+}
+
+/**
+ * Fetches a paginated list of articles liked by the current user.
+ */
+export async function getLikedArticles({
+  page = 1,
+  limit = 12,
+}: GetLikedArticlesParams = {}) {
+  const user = await getUser();
+
+  if (!user) {
+    throw new Error("Vous devez être connecté pour voir vos favoris.");
+  }
+
+  const skip = (page - 1) * limit;
+
+  const [likes, totalCount] = await Promise.all([
+    db.like.findMany({
+      where: { userId: user.id },
+      take: limit,
+      skip,
+      orderBy: { createdAt: "desc" },
+      include: {
+        article: {
+          include: {
+            media: true,
+            category: { select: { name: true } },
+            author: { select: { name: true } },
+            parts: {
+              select: { content: true, order: true },
+              orderBy: { order: "asc" },
+            },
+          },
+        },
+      },
+    }),
+    db.like.count({ where: { userId: user.id } }),
+  ]);
+
+  return {
+    articles: likes.map((like) => like.article),
+    nextPage: skip + likes.length < totalCount ? page + 1 : undefined,
+    totalCount,
+  };
+}
+
+/**
+ * Public listing of the editorial team (authors and admins) for the /redaction page.
+ */
+export async function getEditorialTeam() {
+  const members = await db.user.findMany({
+    where: { role: { in: ["AUTHOR", "ADMIN"] } },
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      role: true,
+      _count: { select: { articles: true } },
+    },
+    orderBy: { articles: { _count: "desc" } },
+  });
+
+  return members;
+}
