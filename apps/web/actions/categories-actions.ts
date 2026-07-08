@@ -295,6 +295,29 @@ export async function getArticleBySlug(slug: string) {
 }
 
 /**
+ * Fetches a single article by id, shaped for the author edit form.
+ */
+export async function getArticleById(id: string) {
+  try {
+    const article = await db.article.findUnique({
+      where: { id },
+      include: {
+        category: { select: { parentId: true } },
+        media: true,
+        parts: {
+          select: { title: true, content: true },
+          orderBy: { order: "asc" },
+        },
+      },
+    });
+    return article;
+  } catch (error) {
+    console.error("Failed to fetch article:", error);
+    throw new Error("Impossible de récupérer l'article.");
+  }
+}
+
+/**
  * Toggles the current user's like on an article.
  */
 export async function toggleLike(articleId: string) {

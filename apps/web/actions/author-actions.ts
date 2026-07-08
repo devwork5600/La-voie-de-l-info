@@ -150,3 +150,36 @@ export async function updateArticle(id: string, data: CreateArticleSchemaType) {
     };
   }
 }
+
+/**
+ * Deletes an article. Authors may only delete their own articles; admins may delete any.
+ */
+export async function deleteArticle(id: string) {
+  const user = await getUser();
+
+  if (!user || (user.role !== "AUTHOR" && user.role !== "ADMIN")) {
+    throw new Error(
+      "Seuls les auteurs et administrateurs peuvent supprimer des articles."
+    );
+  }
+
+  const isAdmin = user.role === "ADMIN";
+
+  try {
+    await db.article.delete({
+      where: isAdmin ? { id } : { id, authorId: user.id },
+    });
+
+    revalidatePath("/author/articles");
+    revalidatePath("/author");
+    revalidatePath("/");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete article:", error);
+    return {
+      success: false,
+      error: "Une erreur est survenue lors de la suppression de l'article.",
+    };
+  }
+}
