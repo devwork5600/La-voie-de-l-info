@@ -15,7 +15,7 @@ export default function ArticlesPage() {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-10 px-4 py-8">
+        <div className="mx-auto flex min-h-[80vh] max-w-[1440px] flex-col gap-10 px-4 py-8">
           <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
             <div className="space-y-2 text-center xl:text-left">
               <h1 className="font-playfair text-4xl font-bold">
