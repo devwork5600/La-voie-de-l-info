@@ -1,44 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
 import { useSession } from "@/lib/auth/auth-client";
 import { useWriterModalStore } from "@/store/useWriterModalStore";
 
 export const AuthModalManager = () => {
   const { data: session, isPending, error } = useSession();
   const { openModal } = useWriterModalStore();
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (isPending || !session) return;
 
-  useEffect(() => {
-    if (!mounted || isPending || !session) return;
-
-    // Explicitly log the session to see if role is present
-    console.log("AuthModalManager: Full Session data:", session);
-
-    const user = session.user as any;
-    const role = user?.role;
-
-    console.log("AuthModalManager: User role:", role);
+    const role = session.user.role;
 
     if (role === "AUTHOR" || role === "ADMIN") {
       const hasSeenModal = sessionStorage.getItem("redirect-modal");
-      console.log("AuthModalManager: hasSeenModal:", hasSeenModal);
 
       if (!hasSeenModal) {
-        console.log("AuthModalManager: Opening Modal...");
         openModal();
         sessionStorage.setItem("redirect-modal", "true");
       }
     }
-  }, [session, isPending, openModal, mounted]);
+  }, [session, isPending, openModal]);
 
-  if (error) {
-    console.error("AuthModalManager: Session error:", error);
-  }
+  useEffect(() => {
+    if (error) {
+      console.error("AuthModalManager: Session error:", error);
+    }
+  }, [error]);
 
   return null;
 };
