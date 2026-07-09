@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
+
 import Footer from "@/components/layout/footer/Footer";
 import NavbarTitle from "@/components/layout/navbar/NavbarTitle";
+
+export const metadata: Metadata = {
+  title: "Connexion",
+  description: "Connectez-vous à votre compte La Voie De L'Info.",
+  robots: { index: false, follow: true },
+};
 
 export default function ConnexionLayout({
   children,

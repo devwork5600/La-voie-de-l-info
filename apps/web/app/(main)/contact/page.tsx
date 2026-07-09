@@ -1,7 +1,15 @@
 import { Mail, MapPin, Phone } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import ContactForm from "./components/ContactForm";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Une question, une suggestion ou un scoop à nous transmettre ? Contactez la rédaction de La Voie De L'Info.",
+  alternates: { canonical: "/contact" },
+};
 
 const CONTACT_INFO = [
   { icon: Mail, label: "contact@lavoiedelinfo.fr" },

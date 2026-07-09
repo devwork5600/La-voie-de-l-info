@@ -15,6 +15,7 @@ interface FeaturedArticleCardProps {
   commentsCount?: number;
   slug: string;
   showBody?: boolean;
+  priority?: boolean;
 }
 
 const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
@@ -29,6 +30,7 @@ const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
   commentsCount,
   slug,
   showBody = true,
+  priority = false,
 }) => {
   const date = new Date(publishedAt).toLocaleDateString("fr-FR", {
     day: "2-digit",
@@ -65,6 +67,7 @@ const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
             fill
             className="object-cover"
             sizes="(min-width: 1024px) 640px, 100vw"
+            priority={priority}
           />
         )}
       </div>

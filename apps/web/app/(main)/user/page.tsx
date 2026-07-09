@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 
 import DeleteAccountCard from "./components/DeleteAccountCard";
@@ -6,6 +7,11 @@ import SubscriptionCard from "./components/SubscriptionCard";
 
 import { getMyAccount } from "@/actions/user-actions";
 import { Card, CardContent } from "@/components/ui/card";
+
+export const metadata: Metadata = {
+  title: "Mon compte",
+  robots: { index: false, follow: false },
+};
 
 const ROLE_LABELS: Record<string, string> = {
   USER: "Utilisateur",

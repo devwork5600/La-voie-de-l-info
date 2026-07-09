@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   Geist,
   Geist_Mono,
@@ -12,6 +12,11 @@ import { WriterRedirectModal } from "@/components/modals/WriterRedirectModal";
 import { TanstackProvider } from "@/components/providers/Tanstackprovider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+
+const SITE_NAME = "La Voie De L'Info";
+const SITE_DESCRIPTION =
+  "Journal d'information indépendant : actualités politiques, économiques, technologiques, écologiques et culturelles vérifiées et analysées par notre rédaction.";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,8 +41,68 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "La Voie de l'Info",
-  description: "Journal d'information indépendant",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: `${SITE_NAME} — Actualités indépendantes`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "actualités",
+    "journal",
+    "presse indépendante",
+    "politique",
+    "économie",
+    "high-tech",
+    "écologie",
+    "culture",
+  ],
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: baseUrl,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — Actualités indépendantes`,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Actualités indépendantes`,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#0e1b30" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1b30" },
+  ],
+  colorScheme: "light dark",
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  name: SITE_NAME,
+  url: baseUrl,
+  logo: `${baseUrl}/icon`,
+  description: SITE_DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -52,6 +117,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
         <TanstackProvider>
           <ThemeProvider
             attribute="class"

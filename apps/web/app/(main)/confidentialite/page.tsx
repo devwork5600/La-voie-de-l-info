@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import LegalSection from "@/components/legal/LegalSection";
+
+export const metadata: Metadata = {
+  title: "Politique de confidentialité",
+  description:
+    "Comment La Voie De L'Info collecte, utilise et protège vos données personnelles.",
+  alternates: { canonical: "/confidentialite" },
+};
 
 export default function ConfidentialitePage() {
   return (

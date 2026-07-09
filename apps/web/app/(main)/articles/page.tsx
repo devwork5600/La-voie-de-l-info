@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { ArticlesGridSkeleton } from "./components/ArticlesGridSkeleton";
@@ -5,6 +6,13 @@ import { ArticlesInfiniteScroll } from "./components/ArticlesInfiniteScroll";
 
 import { getRootCategoriesWithChildren } from "@/actions/categories-actions";
 import { Skeleton } from "@/components/ui/skeleton";
+
+export const metadata: Metadata = {
+  title: "Tous les articles",
+  description:
+    "Parcourez l'ensemble de nos articles : politique, économie, high-tech, écologie, culture et bien plus.",
+  alternates: { canonical: "/articles" },
+};
 
 async function ArticlesData() {
   const categories = await getRootCategoriesWithChildren();

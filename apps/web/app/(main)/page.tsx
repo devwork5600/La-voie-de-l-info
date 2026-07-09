@@ -52,6 +52,7 @@ const Page = async () => {
         articles={featuredPool}
         sideArticles={sideArticles}
         special="subscribe"
+        priority
       />
 
       <div className="mx-auto w-full max-w-[1180px] px-4 py-8">

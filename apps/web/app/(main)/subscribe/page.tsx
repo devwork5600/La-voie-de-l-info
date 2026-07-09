@@ -6,6 +6,7 @@ import {
   Shield,
   Sparkles,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -14,6 +15,13 @@ import {
 } from "@/actions/subscription-actions";
 import { Button } from "@/components/ui/button";
 import { getUser } from "@/lib/auth/auth-session";
+
+export const metadata: Metadata = {
+  title: "Abonnement",
+  description:
+    "Accédez en illimité à tous les articles de La Voie De L'Info : sans publicité, avec nos newsletters exclusives et un accès prioritaire à nos nouveaux formats.",
+  alternates: { canonical: "/subscribe" },
+};
 
 const FEATURES = [
   { icon: BookOpen, label: "Accès illimité à tous les articles" },

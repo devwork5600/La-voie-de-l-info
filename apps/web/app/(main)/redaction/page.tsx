@@ -1,9 +1,17 @@
 import { PenTool, ShieldCheck } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { getEditorialTeam } from "@/actions/categories-actions";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "La Rédaction",
+  description:
+    "Découvrez l'équipe de journalistes indépendants qui fait La Voie De L'Info : une information rigoureuse, vérifiée et accessible à tous.",
+  alternates: { canonical: "/redaction" },
+};
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "Rédacteur en chef",

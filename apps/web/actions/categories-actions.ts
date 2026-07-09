@@ -1,6 +1,7 @@
 "use server";
 
 import { db, Prisma } from "@lvdi/database";
+import { cache } from "react";
 
 import { getUser } from "@/lib/auth/auth-session";
 
@@ -245,8 +246,10 @@ export async function getArticles({
 
 /**
  * Fetches a single article by slug with its relations, for the article page.
+ * Wrapped in React's `cache()` so `generateMetadata` and the page component
+ * (which both need it in the same request) only hit the database once.
  */
-export async function getArticleBySlug(slug: string) {
+export const getArticleBySlug = cache(async (slug: string) => {
   try {
     const article = await db.article.findUnique({
       where: { slug },
@@ -292,7 +295,7 @@ export async function getArticleBySlug(slug: string) {
     console.error("Failed to fetch article:", error);
     throw new Error("Impossible de récupérer l'article.");
   }
-}
+});
 
 /**
  * Fetches a single article by id, shaped for the author edit form.

@@ -17,17 +17,19 @@ interface FeaturedWithSideProps {
   articles: ArticleWithRelations[];
   sideArticles: ArticleWithRelations[];
   special?: "subscribe" | "newsletter";
+  priority?: boolean;
 }
 
 const FeaturedWithSide = ({
   articles,
   sideArticles,
   special = "subscribe",
+  priority = false,
 }: FeaturedWithSideProps) => {
   return (
     <div className="mx-auto flex max-w-[1440px] justify-center gap-6 px-4 py-8">
       <main className="flex w-full max-w-4xl flex-col gap-16">
-        {articles.map((article) => (
+        {articles.map((article, index) => (
           <FeaturedArticleCard
             key={article.id}
             slug={article.slug}
@@ -39,6 +41,7 @@ const FeaturedWithSide = ({
             imageAlt={article.media?.alt ?? undefined}
             author={article.author.name ?? "Rédaction"}
             publishedAt={article.createdAt}
+            priority={priority && index === 0}
           />
         ))}
       </main>
