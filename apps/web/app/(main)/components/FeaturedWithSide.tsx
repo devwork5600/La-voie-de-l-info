@@ -46,7 +46,7 @@ const FeaturedWithSide = ({
         ))}
       </main>
 
-      <aside className="hidden md:block">
+      <aside className="hidden lg:block">
         <div className="sticky top-24 w-[260px] shrink-0">
           <TrendingArticles articles={sideArticles} special={special} />
         </div>
