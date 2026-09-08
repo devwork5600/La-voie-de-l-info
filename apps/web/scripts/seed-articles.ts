@@ -17,16 +17,15 @@ type SeedArticle = Omit<
   subCategorySlug?: string;
 };
 
-const image = (seed: string) => `https://picsum.photos/seed/${seed}/1200/800`;
-
 const SEED_ARTICLES: SeedArticle[] = [
   {
     categorySlug: "politique",
     title: "Réforme des retraites : ce que prévoit le nouveau texte",
     media: {
       type: "IMAGE",
-      url: image("reforme-retraites"),
-      thumbnailUrl: image("reforme-retraites"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/reforme-retraites_zjpjtv.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/reforme-retraites_zjpjtv.jpg",
       alt: "Façade de l'Assemblée nationale",
       legend: "L'Assemblée nationale examine le texte en séance publique.",
     },
@@ -58,8 +57,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Inflation : les prix à la consommation ralentissent enfin",
     media: {
       type: "IMAGE",
-      url: image("inflation-prix"),
-      thumbnailUrl: image("inflation-prix"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/inflation_qaig0d.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/inflation_qaig0d.jpg",
       alt: "Rayons d'un supermarché avec étiquettes de prix",
       legend:
         "La hausse des prix alimentaires marque le pas pour le troisième mois consécutif.",
@@ -86,8 +86,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Cannes 2026 : la sélection officielle dévoilée",
     media: {
       type: "IMAGE",
-      url: image("cannes-festival"),
-      thumbnailUrl: image("cannes-festival"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/cannes_opjkrq.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884380/cannes_opjkrq.webp",
       alt: "Marches du Palais des Festivals à Cannes",
       legend: "Le Palais des Festivals se prépare à accueillir sa 79e édition.",
     },
@@ -119,8 +120,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Un nouveau modèle d'IA générative bat les records de rapidité",
     media: {
       type: "IMAGE",
-      url: image("ia-datacenter"),
-      thumbnailUrl: image("ia-datacenter"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884505/ia1_u4uj8j.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884505/ia1_u4uj8j.webp",
       alt: "Rangées de serveurs dans un centre de données",
       legend:
         "Le modèle tourne sur une infrastructure dédiée annoncée cette semaine.",
@@ -148,8 +150,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Vague de chaleur précoce : les scientifiques s'inquiètent",
     media: {
       type: "IMAGE",
-      url: image("vague-chaleur"),
-      thumbnailUrl: image("vague-chaleur"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884595/les-vagues-de-chaleur-precoces-inquietent-les-experts-leur-impact-pourrait-etre-plus-important-que-celui-des-canicules_ztxhl7.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884595/les-vagues-de-chaleur-precoces-inquietent-les-experts-leur-impact-pourrait-etre-plus-important-que-celui-des-canicules_ztxhl7.jpg",
       alt: "Thermomètre affichant une température élevée en extérieur",
       legend:
         "Les températures dépassent déjà les normales saisonnières de plusieurs degrés.",
@@ -177,8 +180,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Ligue des champions : le tirage au sort des quarts de finale",
     media: {
       type: "IMAGE",
-      url: image("football-stade"),
-      thumbnailUrl: image("football-stade"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1782721378/lvdl/j7uiqimfnofmirrfixaj.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1782721378/lvdl/j7uiqimfnofmirrfixaj.jpg",
       alt: "Stade de football rempli de spectateurs en soirée",
       legend:
         "Les quarts de finale se joueront en avril dans une ambiance électrique.",
@@ -211,8 +215,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Une nouvelle exoplanète potentiellement habitable détectée",
     media: {
       type: "IMAGE",
-      url: image("exoplanete-espace"),
-      thumbnailUrl: image("exoplanete-espace"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884699/nouvelle-planete-habitable_icuq8p.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884699/nouvelle-planete-habitable_icuq8p.jpg",
       alt: "Vue d'artiste d'une exoplanète depuis l'espace",
       legend: "L'exoplanète orbite dans la zone habitable de son étoile.",
     },
@@ -245,8 +250,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Pénurie de médicaments : les pharmaciens tirent la sonnette d'alarme",
     media: {
       type: "IMAGE",
-      url: image("pharmacie-medicaments"),
-      thumbnailUrl: image("pharmacie-medicaments"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884769/medicaments-_ah0bqn.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884769/medicaments-_ah0bqn.jpg",
       alt: "Étagères de pharmacie avec boîtes de médicaments",
       legend:
         "Plusieurs traitements courants manquent depuis plusieurs semaines.",
@@ -278,8 +284,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Élections municipales : les listes se dévoilent au compte-gouttes",
     media: {
       type: "IMAGE",
-      url: image("elections-municipales"),
-      thumbnailUrl: image("elections-municipales"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1782234194/lvdl/adgrhzq6yvh7yubykrnm.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1782234194/lvdl/adgrhzq6yvh7yubykrnm.jpg",
       alt: "Bureau de vote avec isoloirs",
       legend:
         "Le dépôt officiel des listes s'échelonnera jusqu'à la fin du mois.",
@@ -312,8 +319,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Le secteur du bâtiment retrouve des couleurs après deux ans de crise",
     media: {
       type: "IMAGE",
-      url: image("secteur-batiment"),
-      thumbnailUrl: image("secteur-batiment"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884909/nexi_eyvcpg.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884909/nexi_eyvcpg.webp",
       alt: "Chantier de construction avec grue",
       legend:
         "Les mises en chantier repartent à la hausse pour la première fois depuis 2024.",
@@ -341,8 +349,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Le cinéma d'auteur retrouve le chemin des salles obscures",
     media: {
       type: "IMAGE",
-      url: image("cinema-salle-obscure"),
-      thumbnailUrl: image("cinema-salle-obscure"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884983/cinema-auteur_zh3gdm.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788884983/cinema-auteur_zh3gdm.webp",
       alt: "Salle de cinéma vide avant une projection",
       legend:
         "Plusieurs salles indépendantes annoncent une fréquentation en hausse.",
@@ -375,8 +384,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Cookies et traceurs : le web s'apprête à changer de règles",
     media: {
       type: "IMAGE",
-      url: image("web-navigateur"),
-      thumbnailUrl: image("web-navigateur"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885059/cnil-cookie_bdp4uv.png",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885059/cnil-cookie_bdp4uv.png",
       alt: "Écran d'ordinateur affichant un navigateur web",
       legend:
         "La nouvelle réglementation entrera en vigueur dès le premier trimestre.",
@@ -404,8 +414,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Le retour discret du loup dans trois nouveaux départements",
     media: {
       type: "IMAGE",
-      url: image("loup-foret"),
-      thumbnailUrl: image("loup-foret"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885124/loup_yykmcz.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885124/loup_yykmcz.webp",
       alt: "Loup observé en lisière de forêt",
       legend:
         "Des traces confirmées par les services de l'Office français de la biodiversité.",
@@ -439,8 +450,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Réforme de la carte judiciaire : plusieurs tribunaux menacés de fermeture",
     media: {
       type: "IMAGE",
-      url: image("tribunal-justice"),
-      thumbnailUrl: image("tribunal-justice"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885253/reforme-tribunaux_d5b4tk.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885253/reforme-tribunaux_d5b4tk.jpg",
       alt: "Façade d'un palais de justice",
       legend:
         "Une dizaine de juridictions de proximité pourraient être regroupées.",
@@ -473,8 +485,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Un essai clinique prometteur contre une maladie rare",
     media: {
       type: "IMAGE",
-      url: image("laboratoire-recherche"),
-      thumbnailUrl: image("laboratoire-recherche"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885315/essaie-clinique_rtywre.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885315/essaie-clinique_rtywre.jpg",
       alt: "Chercheur en laboratoire manipulant des échantillons",
       legend: "L'essai de phase 2 a été mené auprès de 120 patients.",
     },
@@ -506,8 +519,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Édito : la démocratie locale mérite mieux qu'un débat expédié",
     media: {
       type: "IMAGE",
-      url: image("edito-democratie"),
-      thumbnailUrl: image("edito-democratie"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885398/democratie_ptv9zh.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885398/democratie_ptv9zh.jpg",
       alt: "Hémicycle d'un conseil municipal en séance",
       legend:
         "Le débat sur la réforme territoriale a été bouclé en une seule séance.",
@@ -536,8 +550,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Sommet climatique : un accord in extremis entre les grandes puissances",
     media: {
       type: "IMAGE",
-      url: image("sommet-international"),
-      thumbnailUrl: image("sommet-international"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885452/accord-climat_xreaaa.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885452/accord-climat_xreaaa.webp",
       alt: "Délégations réunies autour d'une table de négociation",
       legend:
         "Les discussions se sont prolongées tard dans la nuit avant l'accord final.",
@@ -570,8 +585,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Remaniement ministériel : trois portefeuilles clés redistribués",
     media: {
       type: "IMAGE",
-      url: image("remaniement-gouvernement"),
-      thumbnailUrl: image("remaniement-gouvernement"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885550/remaniment_klqglp.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885550/remaniment_klqglp.webp",
       alt: "Façade d'un ministère avec drapeaux",
       legend:
         "La nouvelle composition du gouvernement a été annoncée en fin de matinée.",
@@ -599,8 +615,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Découpage électoral : la carte contestée par plusieurs élus locaux",
     media: {
       type: "IMAGE",
-      url: image("decoupage-electoral"),
-      thumbnailUrl: image("decoupage-electoral"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885666/Cartes_opdrc3.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885666/Cartes_opdrc3.webp",
       alt: "Carte administrative affichée lors d'une réunion publique",
       legend:
         "Le nouveau tracé des circonscriptions doit entrer en vigueur avant le prochain scrutin.",
@@ -634,8 +651,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Les marchés clôturent en forte hausse après les annonces de la banque centrale",
     media: {
       type: "IMAGE",
-      url: image("bourse-marches"),
-      thumbnailUrl: image("bourse-marches"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885762/marche-finacier_sfomnd.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788885762/marche-finacier_sfomnd.jpg",
       alt: "Écrans de cotations boursières",
       legend:
         "L'indice principal gagne plus de 2 % sur la seule séance du jour.",
@@ -664,8 +682,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Une entreprise industrielle historique annonce un plan de relocalisation",
     media: {
       type: "IMAGE",
-      url: image("usine-relocalisation"),
-      thumbnailUrl: image("usine-relocalisation"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888346/initial-slip-francais-broussaud-textiles_agqzfq.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888346/initial-slip-francais-broussaud-textiles_agqzfq.jpg",
       alt: "Ligne de production dans une usine",
       legend:
         "Le site doit rouvrir avec près de 300 emplois créés d'ici deux ans.",
@@ -699,8 +718,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Prix de l'immobilier : un premier recul depuis cinq ans dans les grandes métropoles",
     media: {
       type: "IMAGE",
-      url: image("immobilier-ville"),
-      thumbnailUrl: image("immobilier-ville"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888422/prix-immobilier_gbxuhv.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888422/prix-immobilier_gbxuhv.webp",
       alt: "Vue aérienne d'immeubles résidentiels en centre-ville",
       legend: "La baisse concerne en premier lieu les grandes agglomérations.",
     },
@@ -728,8 +748,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Un festival emblématique dévoile une programmation résolument éclectique",
     media: {
       type: "IMAGE",
-      url: image("festival-musique"),
-      thumbnailUrl: image("festival-musique"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888487/festival-electro_ynruyc.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888487/festival-electro_ynruyc.webp",
       alt: "Scène de concert avec éclairages colorés",
       legend:
         "Plus de soixante artistes se produiront sur quatre scènes durant l'événement.",
@@ -762,8 +783,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "La rentrée littéraire s'annonce particulièrement dense cette année",
     media: {
       type: "IMAGE",
-      url: image("rentree-litteraire"),
-      thumbnailUrl: image("rentree-litteraire"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888601/livres_xk5hoz.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888601/livres_xk5hoz.jpg",
       alt: "Piles de livres sur une table de librairie",
       legend:
         "Plus de quatre cents romans sont attendus dans les librairies d'ici octobre.",
@@ -798,8 +820,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Le jeu indépendant le plus attendu de l'année sort enfin sur consoles",
     media: {
       type: "IMAGE",
-      url: image("jeu-video-console"),
-      thumbnailUrl: image("jeu-video-console"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888660/jeux-video_tqkqzp.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888660/jeux-video_tqkqzp.webp",
       alt: "Manette de jeu vidéo devant un écran allumé",
       legend: "Le titre était initialement prévu pour l'année dernière.",
     },
@@ -831,8 +854,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Une série culte confirme le tournage de sa saison finale",
     media: {
       type: "IMAGE",
-      url: image("tournage-serie"),
-      thumbnailUrl: image("tournage-serie"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888735/from-season-5_fwg7oh.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888735/from-season-5_fwg7oh.webp",
       alt: "Plateau de tournage avec caméras et projecteurs",
       legend: "Le tournage doit s'étaler sur près de huit mois.",
     },
@@ -865,8 +889,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Le club historique décroche sa qualification pour la finale continentale",
     media: {
       type: "IMAGE",
-      url: image("basketball-match"),
-      thumbnailUrl: image("basketball-match"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888818/club-qualification_aeqbhr.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888818/club-qualification_aeqbhr.jpg",
       alt: "Match de basketball en salle comble",
       legend:
         "La rencontre s'est jouée dans les dernières secondes du temps additionnel.",
@@ -899,8 +924,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Tournoi des Six Nations : un dernier match décisif pour le titre",
     media: {
       type: "IMAGE",
-      url: image("rugby-stade"),
-      thumbnailUrl: image("rugby-stade"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888918/5-nations_ahoqvu.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888918/5-nations_ahoqvu.jpg",
       alt: "Stade de rugby rempli sous les projecteurs",
       legend:
         "Trois équipes restent encore en course pour le titre avant la dernière journée.",
@@ -935,8 +961,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Le grand tour cycliste dévoile un parcours plus exigeant que jamais",
     media: {
       type: "IMAGE",
-      url: image("cyclisme-montagne"),
-      thumbnailUrl: image("cyclisme-montagne"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888968/1444x920_credit-obligatoire-photo-de-david-pastor-shutterstock-15459950bj-gianmarco-garofoli-ita-de-soudal-quick-step-lors-de-la-vuelta-80e-tour-d-espagne-2025-etape-5-course-cycliste-une-etape-de-contre-la-montre-par-equipes-de-24-1-km-de-figueres_k2orjz.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788888968/1444x920_credit-obligatoire-photo-de-david-pastor-shutterstock-15459950bj-gianmarco-garofoli-ita-de-soudal-quick-step-lors-de-la-vuelta-80e-tour-d-espagne-2025-etape-5-course-cycliste-une-etape-de-contre-la-montre-par-equipes-de-24-1-km-de-figueres_k2orjz.jpg",
       alt: "Peloton de cyclistes gravissant une route de montagne",
       legend: "L'édition comptera cette année cinq étapes de haute montagne.",
     },
@@ -963,8 +990,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Un nouveau parc éolien offshore mis en service au large des côtes",
     media: {
       type: "IMAGE",
-      url: image("eolien-offshore"),
-      thumbnailUrl: image("eolien-offshore"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889017/ge_adpszz.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889017/ge_adpszz.jpg",
       alt: "Éoliennes offshore alignées en mer",
       legend:
         "Le parc doit couvrir la consommation électrique de près de 800 000 foyers.",
@@ -998,8 +1026,9 @@ const SEED_ARTICLES: SeedArticle[] = [
       "Réforme du baccalauréat : les enseignants dénoncent une précipitation",
     media: {
       type: "IMAGE",
-      url: image("education-lycee"),
-      thumbnailUrl: image("education-lycee"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889082/reforme-bac_hez5c5.jpg",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889082/reforme-bac_hez5c5.jpg",
       alt: "Salle de classe de lycée vide",
       legend: "La réforme doit entrer en application dès la rentrée prochaine.",
     },
@@ -1031,8 +1060,9 @@ const SEED_ARTICLES: SeedArticle[] = [
     title: "Chronique : ce que nos habitudes numériques disent de nous",
     media: {
       type: "IMAGE",
-      url: image("chronique-numerique"),
-      thumbnailUrl: image("chronique-numerique"),
+      url: "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889140/2198213_g9ktvz.webp",
+      thumbnailUrl:
+        "https://res.cloudinary.com/dvgk2wubd/image/upload/v1788889140/2198213_g9ktvz.webp",
       alt: "Personne consultant son téléphone dans la rue",
       legend:
         "Une consultation devenue quasi permanente pour une large partie de la population.",
