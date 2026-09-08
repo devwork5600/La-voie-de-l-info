@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
 import { auth } from "./lib/auth/auth";
 
 export async function proxy(request: NextRequest) {
@@ -10,16 +11,19 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /author routes (Authors and Admins only)
-  if (pathname.startsWith('/author')) {
-    if (!session || (session.user.role !== "AUTHOR" && session.user.role !== "ADMIN")) {
-      return NextResponse.redirect(new URL('/', request.url));
+  if (pathname.startsWith("/author")) {
+    if (
+      !session ||
+      (session.user.role !== "AUTHOR" && session.user.role !== "ADMIN")
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
   // Protect /admin routes (Admins only)
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith("/admin")) {
     if (!session || session.user.role !== "ADMIN") {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
@@ -27,5 +31,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/author/:path*', '/admin/:path*'],
-}
+  matcher: ["/author/:path*", "/admin/:path*"],
+};

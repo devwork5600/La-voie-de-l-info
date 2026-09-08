@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# The web app's /articles route is statically prerendered at build time and
+# genuinely queries the database, so `next build` needs a real (even if
+# empty) Postgres reachable — dummy env vars alone aren't enough here.
+env:
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/lvdi_ci
+  STRIPE_SECRET_KEY: sk_test_dummy
+  STRIPE_WEBHOOK_SECRET: whsec_dummy
+  STRIPE_PRODUCT_ID: prod_dummy
+  BETTER_AUTH_SECRET: 0123456789abcdef0123456789abcdef
+  BETTER_AUTH_URL: http://localhost:3000
+  NEXT_PUBLIC_BETTER_AUTH_URL: http://localhost:3000
+  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: dummy
+  CLOUDINARY_API_KEY: dummy
+  CLOUDINARY_API_SECRET: dummy
+  RESEND_API_KEY: re_dummy
+  EMAIL_FROM: test@example.com
+  CONTACT_EMAIL: test@example.com
+  GOOGLE_CLIENT_ID: dummy
+  GOOGLE_CLIENT_SECRET: dummy
+  GITHUB_CLIENT_ID: dummy
+  GITHUB_CLIENT_SECRET: dummy
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lvdi_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Push Prisma schema to the CI database
+        run: npx prisma db push --accept-data-loss
+        working-directory: packages/database
+
+      - run: npm run lint
+
+      - run: npm run test
+
+      - run: npm run build

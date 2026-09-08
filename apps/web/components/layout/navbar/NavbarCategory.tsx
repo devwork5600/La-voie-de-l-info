@@ -1,7 +1,8 @@
 import Link from "next/link";
 import React from "react";
-import { cn } from "@/lib/utils";
+
 import { CategoryWithChildren } from "@/actions/categories-actions";
+import { cn } from "@/lib/utils";
 
 interface NavbarCategoryProps {
   categories: CategoryWithChildren[];
@@ -23,12 +24,12 @@ const VISIBLE_FROM = [
 
 const NavbarCategory: React.FC<NavbarCategoryProps> = ({ categories }) => {
   return (
-    <ul className="hidden items-center justify-center text-sm uppercase xl:flex shrink-">
+    <ul className="shrink- hidden items-center justify-center text-sm uppercase xl:flex">
       {categories.slice(0, VISIBLE_FROM.length).map((category, index) => (
         <li key={category.id} className={cn(VISIBLE_FROM[index])}>
           <Link
             href={`/articles?category=${category.slug}`}
-            className="relative mx-3 py-1 font-medium after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            className="after:bg-primary relative mx-3 py-1 font-medium after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-0 after:transition-all after:duration-300 hover:after:w-full"
           >
             {category.name}
           </Link>

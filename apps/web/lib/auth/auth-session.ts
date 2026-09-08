@@ -5,9 +5,9 @@
  * Server Actions, and API Routes.
  */
 
-import { headers } from 'next/headers';
+import { headers } from "next/headers";
 
-import { auth } from './auth';
+import { auth } from "./auth";
 
 /**
  * Retrieves the currently authenticated user from the session.

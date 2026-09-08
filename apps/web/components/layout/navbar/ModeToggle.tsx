@@ -17,7 +17,7 @@ export function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="hover:text-primary  cursor-pointer items-center justify-center transition-colors hidden sm:flex"
+          className="hover:text-primary hidden cursor-pointer items-center justify-center transition-colors sm:flex"
           aria-label="Toggle theme "
         >
           <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

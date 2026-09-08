@@ -1,14 +1,13 @@
-import { betterAuth } from 'better-auth';
-import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { nextCookies } from 'better-auth/next-js';
-import { magicLink } from 'better-auth/plugins';
+import { db } from "@lvdi/database";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
+import { magicLink } from "better-auth/plugins";
 
-import { sendEmail } from '@/actions/email-actions';
-
-import { db } from '@lvdi/database';
+import { sendEmail } from "@/actions/email-actions";
 
 export const auth = betterAuth({
-  database: prismaAdapter(db, { provider: 'postgresql' }),
+  database: prismaAdapter(db, { provider: "postgresql" }),
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
 
@@ -16,13 +15,13 @@ export const auth = betterAuth({
     nextCookies(),
     magicLink({
       sendMagicLink: async ({ email, url }) => {
-        const username = email.split('@')[0];
+        const username = email.split("@")[0];
         await sendEmail({
           to: email,
           username,
-          subject: 'Your Magic Sign-In Link',
-          text: 'Click the button below to sign in.',
-          buttonText: 'Sign In',
+          subject: "Your Magic Sign-In Link",
+          text: "Click the button below to sign in.",
+          buttonText: "Sign In",
           linkUrl: url,
         });
       },
@@ -32,13 +31,13 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: 'string',
+        type: "string",
         required: false,
-        defaultValue: 'USER',
+        defaultValue: "USER",
         input: false,
       },
       isSubscribed: {
-        type: 'boolean',
+        type: "boolean",
         required: false,
         defaultValue: false,
         input: false,
@@ -57,18 +56,18 @@ export const auth = betterAuth({
         token: string;
       }) => {
         try {
-          const username = user.email.split('@')[0];
+          const username = user.email.split("@")[0];
           await sendEmail({
             to: user.email,
             username: user.name || username,
-            subject: 'Approve Email Change',
+            subject: "Approve Email Change",
             text: `Hi ${user.name || username},\n\nYou requested to change your email to ${newEmail}.\n\nPlease click the link below to approve this change:\n${url}\n\nIf you didn't request this, please ignore this message.`,
-            buttonText: 'Approve Email Change',
+            buttonText: "Approve Email Change",
             linkUrl: url,
           });
         } catch (err) {
-          console.error('Failed to send email change verification:', err);
-          throw new Error('Failed to send email. Please try again later.');
+          console.error("Failed to send email change verification:", err);
+          throw new Error("Failed to send email. Please try again later.");
         }
       },
     },
