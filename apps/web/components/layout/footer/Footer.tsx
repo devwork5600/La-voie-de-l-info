@@ -2,9 +2,9 @@ import { Globe, Rss, Share2 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { Button } from "@/components/ui/button";
-
 import { NewsletterSignup } from "./NewsletterSignup";
+
+import { Button } from "@/components/ui/button";
 
 const RUBRIQUES = [
   { name: "Politique", slug: "politique" },
@@ -22,29 +22,43 @@ const INSTITUTION = [
 ];
 
 const Footer: React.FC = () => (
-  <footer className="w-full mt-6 border-t-4 border-primary bg-brand text-brand-foreground">
+  <footer className="border-primary bg-brand text-brand-foreground mt-6 w-full border-t-4">
     <div className="mx-auto w-full max-w-7xl space-y-12 px-4 py-16 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h2 className="text-2xl font-semibold font-playfair">La Voie De L&rsquo;Info</h2>
+          <h2 className="font-playfair text-2xl font-semibold">
+            La Voie De L&rsquo;Info
+          </h2>
 
           <div className="mt-6">
             <NewsletterSignup />
           </div>
 
-          <ul className="flex gap-4 mt-8">
+          <ul className="mt-8 flex gap-4">
             <li>
-              <a href="/" aria-label="Site web" className="transition hover:text-primary">
+              <a
+                href="/"
+                aria-label="Site web"
+                className="hover:text-primary transition"
+              >
                 <Globe className="size-5" />
               </a>
             </li>
             <li>
-              <a href="/" aria-label="Flux RSS" className="transition hover:text-primary">
+              <a
+                href="/"
+                aria-label="Flux RSS"
+                className="hover:text-primary transition"
+              >
                 <Rss className="size-5" />
               </a>
             </li>
             <li>
-              <a href="/" aria-label="Partager" className="transition hover:text-primary">
+              <a
+                href="/"
+                aria-label="Partager"
+                className="hover:text-primary transition"
+              >
                 <Share2 className="size-5" />
               </a>
             </li>
@@ -52,13 +66,15 @@ const Footer: React.FC = () => (
         </div>
 
         <div>
-          <p className="font-medium uppercase tracking-wide text-primary">Rubriques</p>
+          <p className="text-primary font-medium tracking-wide uppercase">
+            Rubriques
+          </p>
           <ul className="mt-6 space-y-4 text-sm">
             {RUBRIQUES.map((rubrique) => (
               <li key={rubrique.slug}>
                 <Link
                   href={`/articles?category=${rubrique.slug}`}
-                  className="transition hover:text-primary"
+                  className="hover:text-primary transition"
                 >
                   {rubrique.name}
                 </Link>
@@ -68,11 +84,16 @@ const Footer: React.FC = () => (
         </div>
 
         <div>
-          <p className="font-medium uppercase tracking-wide text-primary">Institution</p>
+          <p className="text-primary font-medium tracking-wide uppercase">
+            Institution
+          </p>
           <ul className="mt-6 space-y-4 text-sm">
             {INSTITUTION.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="transition hover:text-primary">
+                <Link
+                  href={item.href}
+                  className="hover:text-primary transition"
+                >
                   {item.name}
                 </Link>
               </li>
@@ -81,18 +102,22 @@ const Footer: React.FC = () => (
         </div>
 
         <div>
-          <p className="font-medium uppercase tracking-wide text-primary">Abonnement</p>
-          <p className="mt-6 text-sm text-brand-foreground/70">
-            Soutenez le journalisme de qualité en vous abonnant à notre offre premium.
+          <p className="text-primary font-medium tracking-wide uppercase">
+            Abonnement
           </p>
-          <Button asChild className="mt-6 uppercase tracking-wide">
+          <p className="text-brand-foreground/70 mt-6 text-sm">
+            Soutenez le journalisme de qualité en vous abonnant à notre offre
+            premium.
+          </p>
+          <Button asChild className="mt-6 tracking-wide uppercase">
             <Link href="/subscribe">Découvrir les offres</Link>
           </Button>
         </div>
       </div>
 
-      <p className="border-t border-white/10 pt-8 text-center text-xs uppercase tracking-wide text-brand-foreground/60">
-        &copy; {new Date().getFullYear()} La Voie De L&rsquo;Info. Édition Prestige.
+      <p className="text-brand-foreground/60 border-t border-white/10 pt-8 text-center text-xs tracking-wide uppercase">
+        &copy; {new Date().getFullYear()} La Voie De L&rsquo;Info. Édition
+        Prestige.
       </p>
     </div>
   </footer>

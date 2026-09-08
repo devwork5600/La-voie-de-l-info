@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 /**
  * Locks body scroll when `locked` is true.
@@ -9,15 +9,16 @@ export function useBodyScrollLock(locked: boolean) {
     if (!locked) return;
 
     // Measure the scrollbar width before hiding it
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     // Prevent content jump when scrollbar disappears
     document.body.style.paddingRight = `${scrollbarWidth}px`;
 
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
     };
   }, [locked]);
 }

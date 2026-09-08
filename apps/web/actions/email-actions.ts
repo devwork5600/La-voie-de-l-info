@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import { EmailTemplate } from '@/components/email-template';
-import { resend } from '@/lib/resend';
+import { EmailTemplate } from "@/components/email-template";
+import { resend } from "@/lib/resend";
 
 export async function sendEmail({
   to,
@@ -19,10 +19,10 @@ export async function sendEmail({
   linkUrl: string;
 }) {
   if (!process.env.RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY environment variable is not set');
+    throw new Error("RESEND_API_KEY environment variable is not set");
   }
   if (!process.env.EMAIL_FROM) {
-    throw new Error('EMAIL_FROM environment variable is not set');
+    throw new Error("EMAIL_FROM environment variable is not set");
   }
 
   try {
@@ -37,12 +37,14 @@ export async function sendEmail({
       success: true,
     };
   } catch (error: unknown) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
 
     return {
       success: false,
       message:
-        error instanceof Error ? error.message : 'Failed to send email. Please try again later.',
+        error instanceof Error
+          ? error.message
+          : "Failed to send email. Please try again later.",
     };
   }
 }
