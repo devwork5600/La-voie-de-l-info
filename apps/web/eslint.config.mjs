@@ -19,6 +19,19 @@ const eslintConfig = [
       import: eslintPluginImport,
       "@next": nextPlugin,
     },
+    settings: {
+      // Pinned instead of "detect": eslint-plugin-react's auto-detection
+      // path calls the ESLint 9 `context.getFilename()` API that ESLint 10
+      // removed (replaced by the `context.filename` property), crashing
+      // every react/* rule with "contextOrFilename.getFilename is not a
+      // function". Explicit version skips that code path entirely — see
+      // node_modules/eslint-plugin-react/lib/util/version.js's
+      // getReactVersionFromContext, which only calls detectReactVersion()
+      // when settings.react.version === "detect".
+      react: {
+        version: "19.2.8",
+      },
+    },
     rules: {
       semi: ["error"],
       quotes: ["error", "double"],
