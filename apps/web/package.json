@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.2.9",
-    "@react-email/ui": "6.6.5",
+    "@react-email/ui": "6.9.5",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
