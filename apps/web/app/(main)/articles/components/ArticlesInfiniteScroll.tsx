@@ -165,10 +165,20 @@ export function ArticlesInfiniteScroll({
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const articles = data?.pages.flatMap((page) => page.articles) || [];
+  // Priority resets per page (not on the flattened index) so the first row
+  // of every newly-fetched batch loads eagerly too — otherwise only the
+  // very first page avoided the pop-in cascade, and it came right back for
+  // every page appended by the infinite scroll.
+  const articles =
+    data?.pages.flatMap((page) =>
+      page.articles.map((article, indexInPage) => ({
+        article,
+        priority: indexInPage < 4,
+      }))
+    ) || [];
 
   return (
-    <div className="mx-auto flex max-w-[1440px] flex-col gap-10 px-4 py-8">
+    <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col gap-10 px-4 py-8">
       <div className="flex flex-col justify-between gap-6 xl:flex-row xl:items-end">
         <div className="space-y-2 text-center xl:text-left">
           <h1 className="font-playfair text-4xl font-bold">
@@ -262,8 +272,12 @@ export function ArticlesInfiniteScroll({
           ? Array.from({ length: 12 }).map((_, i) => (
               <ArticlesGridSkeleton key={`skeleton-${i}`} />
             ))
-          : articles.map((article) => (
-              <ArticleCarouselCard key={article.id} article={article} />
+          : articles.map(({ article, priority }) => (
+              <ArticleCarouselCard
+                key={article.id}
+                article={article}
+                priority={priority}
+              />
             ))}
 
         {isFetchingNextPage &&

@@ -16,9 +16,9 @@ type ArticleWithRelations = Prisma.ArticleGetPayload<{
   };
 }>;
 
-type Props = { article: ArticleWithRelations };
+type Props = { article: ArticleWithRelations; priority?: boolean };
 
-export function ArticleCarouselCard({ article }: Props) {
+export function ArticleCarouselCard({ article, priority = false }: Props) {
   const [isLoading, setIsLoading] = useState(true);
 
   if (!article) return null;
@@ -34,6 +34,7 @@ export function ArticleCarouselCard({ article }: Props) {
               src={article.media.url}
               alt={article.media.alt ?? article.title}
               fill
+              priority={priority}
               sizes="(min-width: 1024px) 280px, 60vw"
               className={cn(
                 "object-cover opacity-0 transition-[opacity,transform] duration-300 group-hover:scale-105",
