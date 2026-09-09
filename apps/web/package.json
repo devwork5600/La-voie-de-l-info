@@ -47,7 +47,7 @@
     "@next/eslint-plugin-next": "^16.3.4",
     "@react-email/ui": "6.9.3",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^20",
+    "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
