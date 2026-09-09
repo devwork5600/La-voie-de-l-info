@@ -41,6 +41,7 @@ export default async function UserPage() {
                 src={account.image}
                 alt={account.name ?? account.email}
                 fill
+                sizes="64px"
                 className="object-cover"
               />
             )}

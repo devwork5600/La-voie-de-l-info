@@ -48,6 +48,7 @@ export default async function RedactionPage() {
                     src={member.image}
                     alt={member.name ?? "Membre de la rédaction"}
                     fill
+                    sizes="64px"
                     className="object-cover"
                   />
                 )}

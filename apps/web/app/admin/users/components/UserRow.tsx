@@ -52,6 +52,7 @@ const UserRow: React.FC<{ user: AdminUserData }> = ({ user }) => {
               src={user.image}
               alt={user.name ?? user.email}
               fill
+              sizes="40px"
               className="object-cover"
             />
           )}
