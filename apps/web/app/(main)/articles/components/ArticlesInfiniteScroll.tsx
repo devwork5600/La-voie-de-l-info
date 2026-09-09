@@ -262,8 +262,12 @@ export function ArticlesInfiniteScroll({
           ? Array.from({ length: 12 }).map((_, i) => (
               <ArticlesGridSkeleton key={`skeleton-${i}`} />
             ))
-          : articles.map((article) => (
-              <ArticleCarouselCard key={article.id} article={article} />
+          : articles.map((article, index) => (
+              <ArticleCarouselCard
+                key={article.id}
+                article={article}
+                priority={index < 4}
+              />
             ))}
 
         {isFetchingNextPage &&
