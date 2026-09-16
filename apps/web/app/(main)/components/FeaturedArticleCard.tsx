@@ -49,9 +49,9 @@ const FeaturedArticleCard: React.FC<FeaturedArticleCardProps> = ({
         </span>
       </div>
 
-      <h1 className="font-playfair mt-4 text-3xl leading-tight font-bold sm:text-4xl">
+      <h2 className="font-playfair mt-4 text-3xl leading-tight font-bold sm:text-4xl">
         {title}
-      </h1>
+      </h2>
 
       <blockquote className="border-primary text-muted-foreground mt-4 border-l-2 pl-4 font-serif text-lg italic">
         {excerpt}
