@@ -48,6 +48,10 @@ const Page = async () => {
 
   return (
     <>
+      <h1 className="sr-only">
+        La Voie De L&rsquo;Info — Actualités indépendantes
+      </h1>
+
       <FeaturedWithSide
         articles={featuredPool}
         sideArticles={sideArticles}
