@@ -1,12 +1,13 @@
 import "dotenv/config";
 
 import { generateFromSources } from "./lib/mistral";
+
 import {
   CATEGORY_MAP,
   clusterBySimilarTopic,
   dedupeByTitle,
   fetchByCategory,
-} from "./lib/newsdata";
+} from "@/lib/newsdata";
 
 const MIN_SOURCES = 2;
 
