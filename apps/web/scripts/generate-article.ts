@@ -2,6 +2,7 @@ import "dotenv/config";
 
 import {
   CATEGORY_MAP,
+  clusterBySimilarTopic,
   dedupeByTitle,
   fetchByCategory,
   type NewsdataArticle,
@@ -15,33 +16,45 @@ interface GeneratedArticle {
   parts: string[];
 }
 
-function buildPrompt(source: NewsdataArticle): string {
+function formatSources(sources: NewsdataArticle[]): string {
+  return sources
+    .map(
+      (source, i) =>
+        `Source ${i + 1} (${source.source_name}) :\nTitre : ${source.title}\nRésumé : ${source.description ?? "(aucun résumé disponible)"}`
+    )
+    .join("\n\n");
+}
+
+function buildPrompt(sources: NewsdataArticle[]): string {
+  const multiSource = sources.length > 1;
+
+  const lengthRule = multiSource
+    ? `Tu disposes de ${sources.length} sources indépendantes sur le même sujet : croise-les pour écrire un article plus complet, 2 à 3 paragraphes (150 à 250 mots). N'utilise que les faits présents dans au moins une des sources ci-dessous.`
+    : "La source ne contient qu'une ou deux phrases : n'écris PAS un article de plusieurs paragraphes à partir de ça. 1 à 2 paragraphes courts (60 à 100 mots au total) suffisent largement.";
+
   return `Tu es journaliste pour "La Voie De L'Info", un site d'actualités indépendant en français.
 
-Rédige un article à partir de la dépêche source ci-dessous. Règles strictes :
-- N'invente AUCUN fait, chiffre, citation ou détail qui n'est pas déjà présent dans la dépêche source. Si l'information est limitée, reste court plutôt que d'inventer pour remplir de l'espace.
+Rédige un article à partir de la ou des source(s) ci-dessous. Règles strictes :
+- N'invente AUCUN fait, chiffre, citation ou détail qui n'est pas déjà présent dans les sources. Si l'information est limitée, reste court plutôt que d'inventer pour remplir de l'espace.
 - Ton neutre et factuel, style journalistique.
-- La dépêche source ne contient qu'une ou deux phrases : n'écris PAS un article de plusieurs paragraphes à partir de ça. 1 à 2 paragraphes courts (60 à 100 mots au total) suffisent largement.
-- Ne recopie pas les phrases de la dépêche mot pour mot : reformule avec tes propres mots.
+- ${lengthRule}
+- Ne recopie pas les phrases sources mot pour mot : reformule avec tes propres mots.
 
-Dépêche source :
-Titre : ${source.title}
-Résumé : ${source.description ?? "(aucun résumé disponible)"}
-Source : ${source.source_name}
+${formatSources(sources)}
 
 Réponds UNIQUEMENT avec un objet JSON de cette forme, sans aucun texte autour :
 {"title": "titre de l'article reformulé", "parts": ["premier paragraphe", "deuxième paragraphe", "..."]}`;
 }
 
-async function generateFromArticle(
-  source: NewsdataArticle
+async function generateFromSources(
+  sources: NewsdataArticle[]
 ): Promise<GeneratedArticle> {
   const res = await fetch(OLLAMA_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       model: MODEL,
-      prompt: buildPrompt(source),
+      prompt: buildPrompt(sources),
       format: "json",
       stream: false,
     }),
@@ -72,11 +85,20 @@ async function main() {
     throw new Error(`Aucun article trouvé pour la catégorie "${categoryArg}"`);
   }
 
-  const source = articles[0];
-  console.log(`Dépêche source : "${source.title}" (${source.source_name})\n`);
-  console.log("Génération en cours avec Mistral...\n");
+  const clusters = clusterBySimilarTopic(articles);
+  const sources = clusters[0];
 
-  const generated = await generateFromArticle(source);
+  console.log(
+    sources.length > 1
+      ? `${sources.length} sources regroupées sur le même sujet :`
+      : "Une seule source disponible pour ce sujet :"
+  );
+  for (const source of sources) {
+    console.log(`  — "${source.title}" (${source.source_name})`);
+  }
+  console.log("\nGénération en cours avec Mistral...\n");
+
+  const generated = await generateFromSources(sources);
 
   console.log(`=== ${generated.title} ===\n`);
   for (const paragraph of generated.parts) {

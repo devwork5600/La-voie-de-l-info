@@ -85,3 +85,128 @@ export function dedupeByTitle(articles: NewsdataArticle[]): NewsdataArticle[] {
 
   return unique;
 }
+
+// Common French function words carry no topical signal and would make
+// unrelated articles look similar just because they share "de", "le", "des"...
+const FRENCH_STOPWORDS = new Set([
+  "le",
+  "la",
+  "les",
+  "un",
+  "une",
+  "des",
+  "de",
+  "du",
+  "et",
+  "ou",
+  "à",
+  "au",
+  "aux",
+  "en",
+  "dans",
+  "pour",
+  "sur",
+  "avec",
+  "sans",
+  "par",
+  "ce",
+  "cet",
+  "cette",
+  "ces",
+  "qui",
+  "que",
+  "quoi",
+  "dont",
+  "où",
+  "il",
+  "elle",
+  "ils",
+  "elles",
+  "son",
+  "sa",
+  "ses",
+  "leur",
+  "leurs",
+  "plus",
+  "moins",
+  "très",
+  "est",
+  "sont",
+  "a",
+  "ont",
+  "être",
+  "avoir",
+  "ne",
+  "pas",
+  "se",
+  "s",
+  "d",
+  "l",
+  "c",
+  "n",
+  "après",
+  "avant",
+  "entre",
+  "vers",
+  "chez",
+]);
+
+function significantWords(title: string): Set<string> {
+  return new Set(
+    normalizeTitle(title)
+      .split(" ")
+      .filter((word) => word.length > 2 && !FRENCH_STOPWORDS.has(word))
+  );
+}
+
+function jaccardSimilarity(a: Set<string>, b: Set<string>): number {
+  const intersection = [...a].filter((word) => b.has(word)).length;
+  const union = new Set([...a, ...b]).size;
+  return union === 0 ? 0 : intersection / union;
+}
+
+// Groups articles that are likely covering the same underlying story but
+// were written independently by different outlets — distinct from
+// dedupeByTitle, which only catches near-identical wire reprints. A cluster
+// gives generate-article.ts several real, independent descriptions of the
+// same event to draw from instead of a single sentence.
+//
+// Same-outlet articles are never merged into the same cluster, even if their
+// titles are similar: two write-ups from one newsroom about the same
+// statement are usually near-identical in substance (verified case: two
+// TF1 Info pieces with the exact same description, just a different
+// headline) and add no real new material — asking Mistral to "expand" on
+// that duplicated content is what caused it to fabricate a detail (an
+// invented, factually wrong name for a political party) rather than
+// genuinely synthesizing independent reporting.
+const SIMILARITY_THRESHOLD = 0.3;
+
+export function clusterBySimilarTopic(
+  articles: NewsdataArticle[]
+): NewsdataArticle[][] {
+  const wordSets = articles.map((article) => significantWords(article.title));
+  const assigned = new Set<number>();
+  const clusters: NewsdataArticle[][] = [];
+
+  for (let i = 0; i < articles.length; i++) {
+    if (assigned.has(i)) continue;
+
+    const cluster = [articles[i]];
+    const sourcesInCluster = new Set([articles[i].source_name]);
+    assigned.add(i);
+
+    for (let j = i + 1; j < articles.length; j++) {
+      if (assigned.has(j)) continue;
+      if (sourcesInCluster.has(articles[j].source_name)) continue;
+      if (jaccardSimilarity(wordSets[i], wordSets[j]) >= SIMILARITY_THRESHOLD) {
+        cluster.push(articles[j]);
+        sourcesInCluster.add(articles[j].source_name);
+        assigned.add(j);
+      }
+    }
+
+    clusters.push(cluster);
+  }
+
+  return clusters.sort((a, b) => b.length - a.length);
+}
