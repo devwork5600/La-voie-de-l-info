@@ -18,21 +18,15 @@ const Page = async () => {
     { articles: featuredPool2 },
     { articles: featuredPool3 },
     categories,
-    tickerItems,
+    tickerSlices,
   ] = await Promise.all([
     getArticles({ limit: 2 }),
     getArticles({ limit: 3, page: 2 }),
     getArticles({ limit: 2, page: 3 }),
     getArticles({ limit: 2, page: 4 }),
     getCategoriesByArticleCount(2, false),
-    getTickerItems(18),
+    getTickerItems(),
   ]);
-
-  const tickerSlices = [
-    tickerItems.slice(0, 6),
-    tickerItems.slice(6, 12),
-    tickerItems.slice(12, 18),
-  ];
 
   const [carouselCategory, gridCategory] = categories;
 

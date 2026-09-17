@@ -30,7 +30,7 @@ const TickerSidebar: React.FC<TickerSidebarProps> = ({
       </div>
 
       <ul className="divide-border mt-6 divide-y">
-        {items.slice(0, 6).map((item) => (
+        {items.slice(0, 5).map((item) => (
           <li key={item.id} className="py-4 first:pt-0">
             <a
               href={item.sourceUrl}

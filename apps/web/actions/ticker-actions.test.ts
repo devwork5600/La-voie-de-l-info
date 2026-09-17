@@ -17,43 +17,56 @@ beforeEach(() => {
 });
 
 describe("getTickerItems", () => {
-  it("caps how many items a single source can contribute", async () => {
+  it("never repeats a source within the same sidebar — the real bug found in production", async () => {
+    // 5 Investing French items came back in a single sidebar in production
+    // before this fix, because a global per-source cap doesn't stop items
+    // from the same source landing next to each other in a flat list that
+    // then gets sliced into groups.
     findMany.mockResolvedValue([
       item("1", "Investing French"),
       item("2", "Investing French"),
       item("3", "Investing French"),
-      item("4", "Investing French"),
-      item("5", "Investing French"),
-      item("6", "Lagefi"),
+      item("4", "Radio France"),
+      item("5", "Sudouest"),
+      item("6", "Le Figaro"),
       item("7", "Lagefi"),
-      item("8", "Sudouest"),
+      item("8", "Lagefi"),
+      item("9", "Lepetitjournal"),
+      item("10", "Boursorama"),
+      item("11", "Franceinfo"),
+      item("12", "Developpez.com"),
+      item("13", "Linternaute"),
+      item("14", "Le10sport"),
+      item("15", "Ici Par France Bleu"),
     ]);
 
-    const result = await getTickerItems(6);
+    const sidebars = await getTickerItems();
 
-    const countBySource = new Map<string, number>();
-    for (const r of result) {
-      countBySource.set(
-        r.sourceName,
-        (countBySource.get(r.sourceName) ?? 0) + 1
-      );
+    expect(sidebars).toHaveLength(3);
+    for (const sidebar of sidebars) {
+      const sourceNames = sidebar.map((i) => i.sourceName);
+      expect(new Set(sourceNames).size).toBe(sourceNames.length);
     }
-
-    expect(countBySource.get("Investing French")).toBe(3);
-    expect(countBySource.get("Lagefi")).toBe(2);
-    expect(countBySource.get("Sudouest")).toBe(1);
-    expect(result).toHaveLength(6);
   });
 
-  it("requests a larger candidate pool than the requested limit", async () => {
+  it("fills each sidebar to 5 items when enough distinct sources are available", async () => {
+    findMany.mockResolvedValue(
+      Array.from({ length: 20 }, (_, i) => item(`${i}`, `Source ${i % 15}`))
+    );
+
+    const sidebars = await getTickerItems();
+
+    for (const sidebar of sidebars) {
+      expect(sidebar).toHaveLength(5);
+    }
+  });
+
+  it("requests a candidate pool much larger than the total item count", async () => {
     findMany.mockResolvedValue([]);
 
-    await getTickerItems(18);
+    await getTickerItems();
 
-    expect(findMany).toHaveBeenCalledWith(
-      expect.objectContaining({ take: expect.any(Number) })
-    );
     const take = findMany.mock.calls[0][0].take;
-    expect(take).toBeGreaterThan(18);
+    expect(take).toBeGreaterThan(15);
   });
 });
