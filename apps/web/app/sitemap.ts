@@ -25,6 +25,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = STATIC_ROUTE_DEFS.map((route) => ({
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await db.article.findMany({
+    where: { published: true },
     select: { slug: true, updatedAt: true },
     orderBy: { updatedAt: "desc" },
   });
