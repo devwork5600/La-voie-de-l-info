@@ -1,7 +1,8 @@
-import { Prisma } from "@lvdi/database";
+import { Prisma, TickerItem } from "@lvdi/database";
 import React from "react";
 
 import FeaturedArticleCard from "./FeaturedArticleCard";
+import TickerSidebar from "./TickerSidebar";
 import TrendingArticles from "./TrendingArticles";
 
 type ArticleWithRelations = Prisma.ArticleGetPayload<{
@@ -15,7 +16,8 @@ type ArticleWithRelations = Prisma.ArticleGetPayload<{
 
 interface FeaturedWithSideProps {
   articles: ArticleWithRelations[];
-  sideArticles: ArticleWithRelations[];
+  sideArticles?: ArticleWithRelations[];
+  tickerItems?: TickerItem[];
   special?: "subscribe" | "newsletter";
   priority?: boolean;
 }
@@ -23,6 +25,7 @@ interface FeaturedWithSideProps {
 const FeaturedWithSide = ({
   articles,
   sideArticles,
+  tickerItems,
   special = "subscribe",
   priority = false,
 }: FeaturedWithSideProps) => {
@@ -48,7 +51,11 @@ const FeaturedWithSide = ({
 
       <aside className="hidden lg:block">
         <div className="sticky top-24 w-[260px] shrink-0">
-          <TrendingArticles articles={sideArticles} special={special} />
+          {tickerItems ? (
+            <TickerSidebar items={tickerItems} special={special} />
+          ) : (
+            <TrendingArticles articles={sideArticles ?? []} special={special} />
+          )}
         </div>
       </aside>
     </div>

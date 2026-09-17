@@ -8,28 +8,31 @@ import {
   getArticles,
   getCategoriesByArticleCount,
 } from "@/actions/categories-actions";
+import { getTickerItems } from "@/actions/ticker-actions";
 import { ArticleCarousel } from "@/components/carousel/ArticleCarousel";
 
 const Page = async () => {
   const [
-    { articles: sideArticles },
     { articles: featuredPool },
     { articles: threeUpPool },
-    { articles: sideArticles2 },
     { articles: featuredPool2 },
-    { articles: sideArticles3 },
     { articles: featuredPool3 },
     categories,
+    tickerItems,
   ] = await Promise.all([
-    getArticles({ limit: 4 }),
     getArticles({ limit: 2 }),
     getArticles({ limit: 3, page: 2 }),
-    getArticles({ limit: 4, page: 2 }),
     getArticles({ limit: 2, page: 3 }),
-    getArticles({ limit: 4, page: 3 }),
     getArticles({ limit: 2, page: 4 }),
     getCategoriesByArticleCount(2, false),
+    getTickerItems(12),
   ]);
+
+  const tickerSlices = [
+    tickerItems.slice(0, 4),
+    tickerItems.slice(4, 8),
+    tickerItems.slice(8, 12),
+  ];
 
   const [carouselCategory, gridCategory] = categories;
 
@@ -54,7 +57,7 @@ const Page = async () => {
 
       <FeaturedWithSide
         articles={featuredPool}
-        sideArticles={sideArticles}
+        tickerItems={tickerSlices[0]}
         special="subscribe"
         priority
       />
@@ -65,7 +68,7 @@ const Page = async () => {
 
       <FeaturedWithSide
         articles={featuredPool2}
-        sideArticles={sideArticles2}
+        tickerItems={tickerSlices[1]}
         special="newsletter"
       />
 
@@ -81,7 +84,7 @@ const Page = async () => {
 
       <FeaturedWithSide
         articles={featuredPool3}
-        sideArticles={sideArticles3}
+        tickerItems={tickerSlices[2]}
         special="subscribe"
       />
     </>

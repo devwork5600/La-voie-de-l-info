@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { CATEGORY_MAP, dedupeByTitle, fetchByCategory } from "./lib/newsdata";
+import { CATEGORY_MAP, dedupeByTitle, fetchByCategory } from "@/lib/newsdata";
 
 async function main() {
   const entries = Object.entries(CATEGORY_MAP);

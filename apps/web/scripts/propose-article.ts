@@ -3,13 +3,14 @@ import "dotenv/config";
 import { db } from "@lvdi/database";
 
 import { generateFromSources } from "./lib/mistral";
+import { searchPhoto, uploadToCloudinary } from "./lib/pexels";
+
 import {
   CATEGORY_MAP,
   clusterBySimilarTopic,
   dedupeByTitle,
   fetchByCategory,
-} from "./lib/newsdata";
-import { searchPhoto, uploadToCloudinary } from "./lib/pexels";
+} from "@/lib/newsdata";
 
 const MIN_SOURCES = 2;
 const REVIEWER_EMAIL = "delagneauadrien@yahoo.fr"; // compte ADMIN : seul habilité à valider les articles

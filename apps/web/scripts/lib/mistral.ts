@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import type { NewsdataArticle } from "./newsdata";
+import type { NewsdataArticle } from "@/lib/newsdata";
 
 const OLLAMA_ENDPOINT = "http://localhost:11434/api/generate";
 const MODEL = "mistral";
