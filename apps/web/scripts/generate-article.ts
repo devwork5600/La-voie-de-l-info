@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import "dotenv/config";
 
 import {
@@ -10,6 +13,12 @@ import {
 
 const OLLAMA_ENDPOINT = "http://localhost:11434/api/generate";
 const MODEL = "mistral";
+const MIN_SOURCES = 3;
+
+const EDITORIAL_GUIDELINES = readFileSync(
+  join(process.cwd(), "scripts/lib/editorial-guidelines.md"),
+  "utf-8"
+);
 
 interface GeneratedArticle {
   title: string;
@@ -26,19 +35,11 @@ function formatSources(sources: NewsdataArticle[]): string {
 }
 
 function buildPrompt(sources: NewsdataArticle[]): string {
-  const multiSource = sources.length > 1;
+  return `Tu es journaliste pour "La Voie De L'Info". Voici la ligne éditoriale du journal, à respecter strictement :
 
-  const lengthRule = multiSource
-    ? `Tu disposes de ${sources.length} sources indépendantes sur le même sujet : croise-les pour écrire un article plus complet, 2 à 3 paragraphes (150 à 250 mots). N'utilise que les faits présents dans au moins une des sources ci-dessous.`
-    : "La source ne contient qu'une ou deux phrases : n'écris PAS un article de plusieurs paragraphes à partir de ça. 1 à 2 paragraphes courts (60 à 100 mots au total) suffisent largement.";
+${EDITORIAL_GUIDELINES}
 
-  return `Tu es journaliste pour "La Voie De L'Info", un site d'actualités indépendant en français.
-
-Rédige un article à partir de la ou des source(s) ci-dessous. Règles strictes :
-- N'invente AUCUN fait, chiffre, citation ou détail qui n'est pas déjà présent dans les sources. Si l'information est limitée, reste court plutôt que d'inventer pour remplir de l'espace.
-- Ton neutre et factuel, style journalistique.
-- ${lengthRule}
-- Ne recopie pas les phrases sources mot pour mot : reformule avec tes propres mots.
+Rédige un article à partir des ${sources.length} sources indépendantes ci-dessous, en croisant leurs informations. N'utilise que les faits présents dans au moins une des sources. Ne recopie pas les phrases sources mot pour mot : reformule avec tes propres mots.
 
 ${formatSources(sources)}
 
@@ -86,13 +87,16 @@ async function main() {
   }
 
   const clusters = clusterBySimilarTopic(articles);
-  const sources = clusters[0];
+  const sources = clusters.find((cluster) => cluster.length >= MIN_SOURCES);
 
-  console.log(
-    sources.length > 1
-      ? `${sources.length} sources regroupées sur le même sujet :`
-      : "Une seule source disponible pour ce sujet :"
-  );
+  if (!sources) {
+    const best = clusters[0]?.length ?? 0;
+    throw new Error(
+      `Aucun sujet avec au moins ${MIN_SOURCES} sources indépendantes dans "${categoryArg}" sur ce lot (meilleur regroupement trouvé : ${best} source(s)). Réessaie plus tard ou sur une autre catégorie.`
+    );
+  }
+
+  console.log(`${sources.length} sources regroupées sur le même sujet :`);
   for (const source of sources) {
     console.log(`  — "${source.title}" (${source.source_name})`);
   }
