@@ -2,6 +2,7 @@
 
 import {
   BarChart3,
+  CheckCircle2,
   Mail,
   Menu,
   Newspaper,
@@ -18,6 +19,7 @@ import { useMenuStore } from "@/store/useMenuStore";
 const NAV_LINKS = [
   { href: "/admin", label: "Statistiques", icon: BarChart3 },
   { href: "/admin/articles", label: "Articles", icon: Newspaper },
+  { href: "/admin/validation", label: "Validation", icon: CheckCircle2 },
   { href: "/admin/users", label: "Utilisateurs", icon: Users },
   { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
 ];

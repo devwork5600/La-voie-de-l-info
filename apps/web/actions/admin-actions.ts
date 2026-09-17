@@ -87,6 +87,51 @@ export async function getNewUsersChartData(range: ChartRange = "monthly") {
 }
 
 /**
+ * Draft articles awaiting review (published: false), newest first —
+ * includes ones created by the AI drafting pipeline (scripts/propose-article.ts)
+ * as well as any regular draft an author leaves unpublished.
+ */
+export async function getUnpublishedArticles() {
+  await ensureAdmin();
+
+  return db.article.findMany({
+    where: { published: false },
+    orderBy: { createdAt: "desc" },
+    include: {
+      media: true,
+      category: { select: { name: true } },
+      author: { select: { name: true, email: true } },
+      parts: { orderBy: { order: "asc" } },
+    },
+  });
+}
+
+/**
+ * Marks a draft as published. This is currently the only place in the
+ * codebase that sets published: true outside of seed data.
+ */
+export async function publishArticle(id: string) {
+  await ensureAdmin();
+
+  try {
+    await db.article.update({
+      where: { id },
+      data: { published: true, publishedAt: new Date() },
+    });
+    revalidatePath("/admin/validation");
+    revalidatePath("/admin/articles");
+    revalidatePath("/articles");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to publish article:", error);
+    return {
+      success: false,
+      error: "Une erreur est survenue lors de la publication.",
+    };
+  }
+}
+
+/**
  * Users who have authored at least one article, for the admin articles filter.
  */
 export async function getArticleAuthors() {
