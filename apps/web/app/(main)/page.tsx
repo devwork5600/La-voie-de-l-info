@@ -25,13 +25,13 @@ const Page = async () => {
     getArticles({ limit: 2, page: 3 }),
     getArticles({ limit: 2, page: 4 }),
     getCategoriesByArticleCount(2, false),
-    getTickerItems(12),
+    getTickerItems(18),
   ]);
 
   const tickerSlices = [
-    tickerItems.slice(0, 4),
-    tickerItems.slice(4, 8),
-    tickerItems.slice(8, 12),
+    tickerItems.slice(0, 6),
+    tickerItems.slice(6, 12),
+    tickerItems.slice(12, 18),
   ];
 
   const [carouselCategory, gridCategory] = categories;
