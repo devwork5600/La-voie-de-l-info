@@ -21,8 +21,13 @@ const BLOCKED_KEYWORDS = [
   "violée",
   "violeur",
   "agression sexuelle",
+  "atteinte sexuelle",
+  "abus sexuel",
   "pédophil",
   "inceste",
+  "corruption de mineur",
+  "détournement de mineur",
+  "attouchement",
   // suicide / automutilation
   "suicide",
   "suicidé",
