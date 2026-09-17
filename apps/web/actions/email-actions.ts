@@ -26,12 +26,20 @@ export async function sendEmail({
   }
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: process.env.EMAIL_FROM,
       to: [to.toLowerCase().trim()],
       subject: subject.trim(),
       react: EmailTemplate({ username, linkUrl, text, buttonText }),
     });
+
+    if (error) {
+      console.error("Error sending email:", error);
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
 
     return {
       success: true,
