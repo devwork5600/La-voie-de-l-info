@@ -19,6 +19,7 @@ const INSTITUTION = [
   { name: "Rédaction", href: "/redaction" },
   { name: "Mentions légales", href: "/mentions-legales" },
   { name: "Confidentialité", href: "/confidentialite" },
+  { name: "Cookies", href: "/cookies" },
 ];
 
 const Footer: React.FC = () => (
