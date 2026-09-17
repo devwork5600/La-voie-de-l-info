@@ -16,7 +16,7 @@ export const auth = betterAuth({
     magicLink({
       sendMagicLink: async ({ email, url }) => {
         const username = email.split("@")[0];
-        await sendEmail({
+        const result = await sendEmail({
           to: email,
           username,
           subject: "Your Magic Sign-In Link",
@@ -24,6 +24,10 @@ export const auth = betterAuth({
           buttonText: "Sign In",
           linkUrl: url,
         });
+
+        if (!result.success) {
+          throw new Error(result.message || "Failed to send magic link");
+        }
       },
     }),
   ],
@@ -55,19 +59,20 @@ export const auth = betterAuth({
         url: string;
         token: string;
       }) => {
-        try {
-          const username = user.email.split("@")[0];
-          await sendEmail({
-            to: user.email,
-            username: user.name || username,
-            subject: "Approve Email Change",
-            text: `Hi ${user.name || username},\n\nYou requested to change your email to ${newEmail}.\n\nPlease click the link below to approve this change:\n${url}\n\nIf you didn't request this, please ignore this message.`,
-            buttonText: "Approve Email Change",
-            linkUrl: url,
-          });
-        } catch (err) {
-          console.error("Failed to send email change verification:", err);
-          throw new Error("Failed to send email. Please try again later.");
+        const username = user.email.split("@")[0];
+        const result = await sendEmail({
+          to: user.email,
+          username: user.name || username,
+          subject: "Approve Email Change",
+          text: `Hi ${user.name || username},\n\nYou requested to change your email to ${newEmail}.\n\nPlease click the link below to approve this change:\n${url}\n\nIf you didn't request this, please ignore this message.`,
+          buttonText: "Approve Email Change",
+          linkUrl: url,
+        });
+
+        if (!result.success) {
+          throw new Error(
+            result.message || "Failed to send email. Please try again later."
+          );
         }
       },
     },
