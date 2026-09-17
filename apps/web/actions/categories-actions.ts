@@ -132,6 +132,8 @@ export interface GetArticlesParams {
   subCategorySlug?: string;
   search?: string;
   authorId?: string;
+  /** Réservé aux vues author/admin : sans ça, seuls les articles publiés sont retournés. */
+  includeUnpublished?: boolean;
 }
 
 /**
@@ -145,6 +147,7 @@ export async function getArticles({
   subCategorySlug,
   search,
   authorId,
+  includeUnpublished = false,
 }: GetArticlesParams = {}) {
   const skip = (page - 1) * limit;
 
@@ -176,6 +179,7 @@ export async function getArticles({
     AND: [
       categoryCondition,
       authorCondition,
+      includeUnpublished ? {} : { published: true },
       search
         ? {
             OR: [
@@ -252,7 +256,7 @@ export async function getArticles({
 export const getArticleBySlug = cache(async (slug: string) => {
   try {
     const article = await db.article.findUnique({
-      where: { slug },
+      where: { slug, published: true },
       include: {
         media: true,
         author: {

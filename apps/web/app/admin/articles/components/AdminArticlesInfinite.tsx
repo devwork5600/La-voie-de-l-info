@@ -70,6 +70,7 @@ const AdminArticlesInfinite: React.FC<AdminArticlesInfiniteProps> = ({
           subCategorySlug:
             selectedSubCategory === "all" ? undefined : selectedSubCategory,
           authorId: selectedAuthor === "all" ? undefined : selectedAuthor,
+          includeUnpublished: true,
         }),
       getNextPageParam: (lastPage) => lastPage.nextPage,
       initialPageParam: 1,

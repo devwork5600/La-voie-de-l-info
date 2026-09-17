@@ -28,7 +28,12 @@ const AuthorArticlesInfinite: React.FC<AuthorArticlesInfiniteProps> = ({
   } = useInfiniteQuery({
     queryKey: ["author-articles", authorId, limit],
     queryFn: ({ pageParam = 1 }) =>
-      getArticles({ page: pageParam, limit, authorId }),
+      getArticles({
+        page: pageParam,
+        limit,
+        authorId,
+        includeUnpublished: true,
+      }),
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 1,
   });
