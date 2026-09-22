@@ -226,20 +226,3 @@ model VisitorVisit {
   @@index([createdAt])
   @@map("visitor_visit")
 }
-
-/// A curated "dernières news" ticker entry: a real headline from a wire
-/// source, linking out to the original article. No generated content, no
-/// illustration image — unlike Article, this is never AI-written, so it
-/// auto-publishes with no review step.
-model TickerItem {
-  id          String   @id @default(uuid())
-  title       String
-  sourceUrl   String   @unique
-  sourceName  String
-  category    String
-  publishedAt DateTime
-  createdAt   DateTime @default(now())
-
-  @@index([createdAt])
-  @@map("ticker_item")
-}
